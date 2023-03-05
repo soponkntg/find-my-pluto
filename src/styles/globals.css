@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  scroll-behavior: smooth;
+}
+
+@layer components {
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
+  .padding {
+    @apply sm:px-16 px-6 sm:py-16 py-6;
+  }
+  .padding-x {
+    @apply sm:px-16 px-6;
+  }
+  .padding-y {
+    @apply sm:py-16 py-6;
+  }
+  .max-width {
+    @apply max-w-[1440px];
+  }
+}
