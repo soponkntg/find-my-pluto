@@ -6,18 +6,30 @@
   scroll-behavior: smooth;
 }
 
+@layer base {
+  :root {
+    --gradient-image: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.35) 30%);
+  }
+  body {
+    @apply bg-page bg-fixed bg-clip-border bg-cover;
+  }
+}
+
 @layer components {
   .flex-center {
     @apply flex justify-center items-center;
   }
+  .flex-start {
+    @apply flex justify-start items-center;
+  }
   .padding {
-    @apply sm:px-16 px-6 sm:py-16 py-6;
+    @apply sm:px-8 px-4 sm:py-16 py-8;
   }
   .padding-x {
-    @apply sm:px-16 px-6;
+    @apply sm:px-8 px-4;
   }
   .padding-y {
-    @apply sm:py-16 py-6;
+    @apply sm:py-8 py-4;
   }
   .max-width {
     @apply max-w-[1440px];

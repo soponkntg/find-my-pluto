@@ -1,4 +1,4 @@
-import { Navbar } from "@/component";
+import { Navbar, NavigationBar, PageLayout } from "@/component";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { Prompt } from "next/font/google";
@@ -13,7 +13,12 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <main className={`${prompt.variable} font-sans`}>
       <Navbar />
-      <Component {...pageProps} />
+      <div className="min-h-[calc(100vh-128px)]">
+        <PageLayout>
+          <Component {...pageProps} />
+        </PageLayout>
+      </div>
+      <NavigationBar />
     </main>
   );
 }

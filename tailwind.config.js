@@ -5,11 +5,20 @@ module.exports = {
   content: ["./src/**/*.tsx"],
   theme: {
     extend: {
+      boxShadow: {
+        navbar: "0px 5px 20px rgba(0, 0, 0, 0.25)",
+        filter: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+      },
+      backgroundImage: {
+        page: "url('/background.jpeg')",
+        "gradient-image": "var(--gradient-image)",
+      },
       colors: {
         primary: "#302A58",
-        secondary: "#00f6ff",
-        dimWhite: "rgba(255, 255, 255, 0.7)",
-        dimBlue: "rgba(9, 151, 124, 0.1)",
+        secondary: "#8778EE",
+        "dim-secondary": "rgba(189, 180, 255, 0.7)",
+        dark: "#24273F",
+        dimWhite: "#CBD2E0",
       },
       fontFamily: {
         sans: ["var(--font-prompt)", ...fontFamily.sans],
@@ -20,7 +29,7 @@ module.exports = {
       sm: "620px",
       md: "768px",
       lg: "1060px",
-      xl: "1200px",
+      xl: "1340px",
     },
   },
   plugins: [],
