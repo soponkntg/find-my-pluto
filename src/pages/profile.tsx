@@ -1,12 +1,23 @@
 import { Button } from "@/component";
 import { PetCard } from "@/component";
-import React, { useState } from "react";
+import { Auth } from "aws-amplify";
+import React, { useContext, useEffect, useState } from "react";
+import { UserContext } from "./_app";
+import { useRouter } from "next/router";
 
 const Profile = () => {
+  const router = useRouter();
   const [checked, setChecked] = useState(false);
   const handleToggle = () => {
     setChecked((prev) => !prev);
   };
+  const userContext = useContext(UserContext);
+  useEffect(() => {
+    if (!userContext.user) {
+      router.push("/");
+    }
+  }, [router, userContext.user]);
+
   return (
     <div className="flex flex-col sm:flex-row space-y-8 sm:space-y-0 sm:space-x-8">
       <div>
@@ -40,6 +51,12 @@ const Profile = () => {
           <div className="hidden xs:block">
             <Button />
           </div>
+          <button
+            className="rounded-[25px] w-full h-[45px] text-white text-xl bg-secondary"
+            onClick={() => Auth.signOut()}
+          >
+            ออกจากระบบ
+          </button>
         </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 place-items-center w-full">

@@ -1,0 +1,101 @@
+{
+  "auth": {
+    "findmyplutofee115c828": {
+      "customAuth": false,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "serviceType": "imported"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_auth_findmyplutofee115c828_allowUnauthenticatedIdentities": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "findmyplutofee115c828"
+        }
+      ]
+    },
+    "AMPLIFY_auth_findmyplutofee115c828_authRoleArn": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "findmyplutofee115c828"
+        }
+      ]
+    },
+    "AMPLIFY_auth_findmyplutofee115c828_authRoleName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "findmyplutofee115c828"
+        }
+      ]
+    },
+    "AMPLIFY_auth_findmyplutofee115c828_identityPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "findmyplutofee115c828"
+        }
+      ]
+    },
+    "AMPLIFY_auth_findmyplutofee115c828_identityPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "findmyplutofee115c828"
+        }
+      ]
+    },
+    "AMPLIFY_auth_findmyplutofee115c828_nativeClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "findmyplutofee115c828"
+        }
+      ]
+    },
+    "AMPLIFY_auth_findmyplutofee115c828_unauthRoleArn": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "findmyplutofee115c828"
+        }
+      ]
+    },
+    "AMPLIFY_auth_findmyplutofee115c828_unauthRoleName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "findmyplutofee115c828"
+        }
+      ]
+    },
+    "AMPLIFY_auth_findmyplutofee115c828_userPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "findmyplutofee115c828"
+        }
+      ]
+    },
+    "AMPLIFY_auth_findmyplutofee115c828_userPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "findmyplutofee115c828"
+        }
+      ]
+    },
+    "AMPLIFY_auth_findmyplutofee115c828_webClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "findmyplutofee115c828"
+        }
+      ]
+    }
+  }
+}

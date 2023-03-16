@@ -5,6 +5,7 @@ import { MapPinIcon, ClockIcon } from "@heroicons/react/24/solid";
 import { MaleIcon } from "./MaleIcon";
 import { FemaleIcon } from "./FemaleIcon";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 type Props = {
   imageurl: string[];
@@ -12,11 +13,28 @@ type Props = {
   bounty?: number;
   location: string;
   timestamp: string;
+  expireDate?: Date;
 };
 
-export const PetCard = ({ imageurl, gender, bounty, location, timestamp }: Props) => {
+export const PetCard = ({ imageurl, gender, bounty, location, timestamp, expireDate }: Props) => {
   const { pathname } = useRouter();
+  const expire = new Date("2023-05-14");
+  const [timeLeft, setTimeLeft] = useState(expire - new Date());
 
+  useEffect(() => {
+    if (!timeLeft) return;
+
+    const intervalId = setInterval(() => {
+      setTimeLeft(expire - new Date());
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [expire, timeLeft]);
+
+  const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+  const seconds = Math.floor((timeLeft / 1000) % 60);
   return (
     <div className="flex flex-col">
       <div
@@ -49,7 +67,7 @@ export const PetCard = ({ imageurl, gender, bounty, location, timestamp }: Props
         } w-[300px] bg-dim-secondary shadow-md rounded-b-xl py-3 px-5 space-y-2`}
       >
         <button className="rounded-[25px] w-full h-[45px] text-white text-lg bg-secondary">
-          วันหมดอายุ: 12:00:59
+          {timeLeft > 0 ? `วันหมดอายุ: ${days}d ${hours}h ${minutes}m ${seconds}s` : "ต่ออายุ"}
         </button>
         <button className="rounded-[25px] w-full h-[45px] text-white text-lg bg-dark">
           หาน้องเจอแล้ว
