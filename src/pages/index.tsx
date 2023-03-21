@@ -7,7 +7,7 @@ export default function Home() {
   const [isCreateCard, setIsCreateCard] = useState<Boolean>(false);
 
   return (
-    <div className="">
+    <div className="relative">
       {isCreateCard && (
         <div className="absolute w-full h-full z-20 backdrop-blur-xl ">
           <Form setIsCreateCard={setIsCreateCard} />
