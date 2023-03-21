@@ -6,6 +6,6 @@ type Props = {
 
 export const PageLayout = ({ children }: Props) => (
   <div className="flex-center">
-    <div className="max-width padding w-full">{children}</div>
+    <div className="max-width padding w-full relative">{children}</div>
   </div>
 );

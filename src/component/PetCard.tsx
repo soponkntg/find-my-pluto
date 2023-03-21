@@ -22,13 +22,15 @@ export const PetCard = ({ imageurl, gender, bounty, location, timestamp, expireD
   const [timeLeft, setTimeLeft] = useState(expire - new Date());
 
   useEffect(() => {
-    if (!timeLeft) return;
+    if (pathname == "/profile") {
+      if (!timeLeft) return;
 
-    const intervalId = setInterval(() => {
-      setTimeLeft(expire - new Date());
-    }, 1000);
+      const intervalId = setInterval(() => {
+        setTimeLeft(expire - new Date());
+      }, 1000);
 
-    return () => clearInterval(intervalId);
+      return () => clearInterval(intervalId);
+    }
   }, [expire, timeLeft]);
 
   const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
