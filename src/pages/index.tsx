@@ -1,4 +1,4 @@
-import { Button } from "@/component";
+import { Button, PageLayout } from "@/component";
 import { PetCard } from "@/component";
 import { Form } from "@/component/Form";
 import { useState } from "react";
@@ -7,7 +7,7 @@ export default function Home() {
   const [isCreateCard, setIsCreateCard] = useState<Boolean>(false);
 
   return (
-    <div className="">
+    <PageLayout>
       {isCreateCard && (
         <div className="absolute w-full h-full z-20 backdrop-blur-xl ">
           <Form setIsCreateCard={setIsCreateCard} />
@@ -63,6 +63,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </div>
+    </PageLayout>
   );
 }

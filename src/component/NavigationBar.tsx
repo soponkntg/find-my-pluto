@@ -1,14 +1,13 @@
 import { navlink } from "@/constant/text";
-import { UserContext } from "@/pages/_app";
+import { useUser } from "@/context/AuthContext";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { Auth } from "aws-amplify";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useContext } from "react";
 
 export const NavigationBar = () => {
   const router = useRouter();
-  const userContext = useContext(UserContext);
+  const userContext = useUser();
   return (
     <div className="w-full bg-primary py-4 px-20 xs:hidden bottom-0 sticky">
       <ul className="flex justify-between w-full list-none">
