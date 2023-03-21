@@ -1,7 +1,12 @@
+import { PageLayout } from "@/component";
 import React from "react";
 
 const FoundDog = () => {
-  return <div>founddog</div>;
+  return (
+    <PageLayout>
+      <div>founddog</div>
+    </PageLayout>
+  );
 };
 
 export default FoundDog;

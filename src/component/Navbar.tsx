@@ -5,13 +5,12 @@ import Link from "next/link";
 
 import { UserIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
-import { useContext } from "react";
-import { UserContext } from "@/pages/_app";
 import { Auth } from "aws-amplify";
+import { useUser } from "@/context/AuthContext";
 
 export const Navbar = () => {
   const router = useRouter();
-  const userContext = useContext(UserContext);
+  const userContext = useUser();
   console.log(userContext);
   return (
     <nav className="bg-primary shadow-navbar flex-center">

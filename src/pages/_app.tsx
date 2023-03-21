@@ -1,11 +1,10 @@
-import { Navbar, NavigationBar, PageLayout } from "@/component";
-import { useContext, createContext } from "react";
 import "@/styles/globals.css";
+import { Navbar, NavigationBar } from "@/component";
 import type { AppProps } from "next/app";
 import { Prompt } from "next/font/google";
-import { useEffect, useState } from "react";
-import { Amplify, Auth, Hub } from "aws-amplify";
+import { Amplify } from "aws-amplify";
 import awsConfig from "../aws-exports";
+import AuthContext from "@/context/AuthContext";
 
 const prompt = Prompt({
   weight: ["400", "500", "600", "700"],
@@ -13,34 +12,7 @@ const prompt = Prompt({
   variable: "--font-prompt",
 });
 
-export const UserContext = createContext<{
-  user: {} | null;
-  setUser: React.Dispatch<React.SetStateAction<any>>;
-}>({ user: null, setUser: () => {} });
-
 export default function App({ Component, pageProps }: AppProps) {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    Hub.listen("auth", ({ payload: { event, data } }) => {
-      switch (event) {
-        case "signIn":
-        case "cognitoHostedUI":
-          getUser().then((userData) => setUser(userData));
-          break;
-        case "signOut":
-          setUser(null);
-          break;
-        case "signIn_failure":
-        case "cognitoHostedUI_failure":
-          console.log("Sign in failure", data);
-          break;
-      }
-    });
-
-    getUser().then((userData) => setUser(userData));
-  }, []);
-
   const isLocalhost = process.env.NODE_ENV === "development";
 
   const [localRedirectSignIn, productionRedirectSignIn] = awsConfig.oauth.redirectSignIn.split(",");
@@ -59,26 +31,13 @@ export default function App({ Component, pageProps }: AppProps) {
 
   Amplify.configure(updatedAwsConfig);
 
-  const getUser = async () => {
-    try {
-      const userData = await Auth.currentAuthenticatedUser();
-      return userData;
-    } catch {
-      return console.log("Not signed in");
-    }
-  };
-
   return (
-    <main className={`${prompt.variable} font-sans`}>
-      <UserContext.Provider value={{ user, setUser }}>
+    <AuthContext>
+      <main className={`${prompt.variable} font-sans`}>
         <Navbar />
-        <div className="min-h-[calc(100vh-128px)]">
-          <PageLayout>
-            <Component {...pageProps} />
-          </PageLayout>
-        </div>
+        <Component {...pageProps} />
         <NavigationBar />
-      </UserContext.Provider>
-    </main>
+      </main>
+    </AuthContext>
   );
 }
