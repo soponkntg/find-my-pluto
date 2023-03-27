@@ -20,6 +20,9 @@ module.exports = {
         "dim-secondary": "rgba(189, 180, 255, 0.7)",
         dark: "#24273F",
         dimWhite: "#CBD2E0",
+        neutrals: {
+          300: "#E2E7F0",
+        },
       },
       fontFamily: {
         sans: ["var(--font-prompt)", ...fontFamily.sans],
