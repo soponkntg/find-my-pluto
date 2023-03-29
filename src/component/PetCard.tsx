@@ -6,6 +6,7 @@ import { MaleIcon } from "./MaleIcon";
 import { FemaleIcon } from "./FemaleIcon";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { Carousel } from "react-responsive-carousel";
 
 type Props = {
   imageurl: string[];
@@ -40,11 +41,11 @@ export const PetCard = ({ imageurl, gender, bounty, location, timestamp, expireD
   return (
     <div className="flex flex-col">
       <div
-        className={`w-[300px] h-[400px] rounded-t-xl overflow-hidden relative object-contain ${
+        className={`w-[300px] h-[400px] rounded-t-xl overflow-hidden relative ${
           pathname == "/profile" ? "shadow-md" : "rounded-b-xl"
         }`}
       >
-        <Image src={dog} alt="dog" fill />
+        <Image src={dog} alt="dog" fill className="object-contain" />
         <div className="absolute top-2 left-2">
           {gender == "male" ? <MaleIcon /> : <FemaleIcon />}
         </div>

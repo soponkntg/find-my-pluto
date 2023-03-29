@@ -34,4 +34,7 @@
   .max-width {
     @apply max-w-[1440px];
   }
+  .contact-button {
+    @apply w-[127px] py-2 rounded-3xl bg-secondary text-white text-sm font-medium;
+  }
 }
