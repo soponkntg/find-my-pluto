@@ -3,7 +3,7 @@ import { FieldValues, UseFormRegister } from "react-hook-form";
 export const Input = (props: {
   id: string;
   type: string;
-  placeholder: string;
+  placeholder?: string;
   register: UseFormRegister<FieldValues>;
 }) => {
   return (

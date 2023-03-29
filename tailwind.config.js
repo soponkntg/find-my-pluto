@@ -21,13 +21,10 @@ module.exports = {
         "dim-secondary": "rgba(189, 180, 255, 0.7)",
         dark: "#24273F",
         dimWhite: "#CBD2E0",
-<<<<<<< HEAD
         neutrals: {
           300: "#E2E7F0",
         },
-=======
         "detail-card": "rgba(36, 39, 63, 0.8)",
->>>>>>> main
       },
       fontFamily: {
         sans: ["var(--font-prompt)", ...fontFamily.sans],

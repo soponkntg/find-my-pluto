@@ -8,6 +8,7 @@ import buttonFound from "../../public/bone-button-found.png";
 import buttonLost from "../../public/bone-button-lost.png";
 
 import { Controller, FieldValues, SubmitHandler, useForm } from "react-hook-form";
+
 import { TimePicker, DatePicker } from "antd";
 
 import Image from "next/image";
@@ -16,6 +17,8 @@ import { Input } from "./Input";
 
 import { CustomSelect } from "./CustomSelect";
 import { area, dogSpecies } from "@/constant/text";
+import GoogleMapReact, { Coords } from "google-map-react";
+
 interface Form {
   // userId: string;
   postType: string;
@@ -39,14 +42,22 @@ interface Form {
   description: string;
   bounty: number;
 }
+
 export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>> }) => {
   const { register, control, handleSubmit, setValue } = useForm();
   const [page, setPage] = useState<number>(0);
+
   const [subdistrict, setSubdistrict] = useState<[{ value: string; label: string }]>([
     { value: "", label: "" },
   ]);
+  const [mapVisible, setMapVisible] = useState<boolean>(false);
+  const [center, setCenter] = useState<Coords>({ lat: 13.72433, lng: 100.50917 });
+  const [zoom, setZoom] = useState<number>(12);
+  const [markerPosition, setMarkerPosition] = useState<Coords>(center);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const inputRef = useRef(null);
+  const mapRef = useRef(null);
+
   const [form, setForm] = useState<Form>({
     // userId: "",
     postType: "",
@@ -74,9 +85,10 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
     districts.push({ value: district, label: district });
   }
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(page);
-    console.log(data);
+  const onMapClick = (event: any) => {
+    const { lat, lng } = event;
+    setMarkerPosition({ lat, lng });
+    setValue("location", { lat, lng });
   };
 
   const onFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,6 +104,25 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
       setPreviewUrls(urls);
     }
   };
+
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    console.log(page);
+    console.log(data);
+  };
+
+  useEffect(() => {
+    const handleMouseDown = (e) => {
+      if (mapRef.current && !mapRef.current.contains(e.target)) {
+        setMapVisible(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleMouseDown);
+
+    return () => {
+      document.removeEventListener("mousedown", handleMouseDown);
+    };
+  }, []);
 
   return (
     <div className="bg-tertiary w-[400px] h-[500px] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 relative rounded-lg">
@@ -343,12 +374,15 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
                 <h4 className="text-black  text-xl whitespace-nowrap font-medium">สถานที่ :</h4>
                 <div className="w-[230px] h-full">
                   {
-                    <Input
-                      id={"animalName"}
-                      type={"text"}
-                      placeholder={"ชื่อน้อง"}
-                      register={register}
-                    />
+                    <div className="w-full h-full">
+                      <div
+                        className="hadow-[inset_5px_5px_7px_0_rgba(174,174,192,0.4)] shadow-[inset_-5px_-5px_7px_0_#FFFFFF] bg-neutrals-300 placeholder-[#CFCFCF] rounded-[10px] w-full h-full py-1 px-2 text-black"
+                        onClick={() => setMapVisible(true)}
+                      >
+                        {"lat " + markerPosition.lat + " lng: " + markerPosition.lng}
+                      </div>
+                      <Input id={"location"} type={"hidden"} register={register} />
+                    </div>
                   }
                 </div>
               </div>
@@ -456,6 +490,21 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
             ))}
           </div>
         )}
+        {mapVisible && (
+          <div
+            className="z-30 h-[400px] w-[400px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+            ref={mapRef}
+          >
+            <GoogleMapReact
+              bootstrapURLKeys={{ key: process.env.google || "" }}
+              defaultCenter={center}
+              defaultZoom={zoom}
+              onClick={onMapClick}
+            >
+              <Marker lat={markerPosition.lat} lng={markerPosition.lng} />
+            </GoogleMapReact>
+          </div>
+        )}
 
         {/* left and right button */}
         {page != 0 && (
@@ -496,3 +545,9 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
     </div>
   );
 };
+
+const Marker = (props: any) => (
+  <div style={{ position: "absolute", transform: "translate(-50%, -50%)" }}>
+    <img src="https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png" />
+  </div>
+);
