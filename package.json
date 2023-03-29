@@ -19,18 +19,24 @@
     "aws-amplify": "^5.0.19",
     "eslint": "8.35.0",
     "eslint-config-next": "13.2.3",
+    "google-map-react": "^2.2.0",
     "next": "13.2.3",
     "react": "18.2.0",
     "react-datepicker": "^4.10.0",
     "react-dom": "18.2.0",
+<<<<<<< HEAD
     "react-hook-form": "^7.43.7",
     "react-select": "^5.7.1",
     "react-tailwindcss-select": "^1.8.5",
     "react-time-picker": "^5.2.0",
     "thaidatepicker-react": "^1.0.2",
+=======
+    "react-responsive-carousel": "^3.2.23",
+>>>>>>> main
     "typescript": "4.9.5"
   },
   "devDependencies": {
+    "@types/google-map-react": "^2.1.7",
     "autoprefixer": "^10.4.13",
     "eslint-config-prettier": "^8.6.0",
     "postcss": "^8.4.21",

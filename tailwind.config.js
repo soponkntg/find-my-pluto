@@ -8,6 +8,7 @@ module.exports = {
       boxShadow: {
         navbar: "0px 5px 20px rgba(0, 0, 0, 0.25)",
         filter: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+        color: "0px 2px 4px rgba(0, 0, 0, 0.5)",
       },
       backgroundImage: {
         page: "url('/background.jpeg')",
@@ -20,9 +21,13 @@ module.exports = {
         "dim-secondary": "rgba(189, 180, 255, 0.7)",
         dark: "#24273F",
         dimWhite: "#CBD2E0",
+<<<<<<< HEAD
         neutrals: {
           300: "#E2E7F0",
         },
+=======
+        "detail-card": "rgba(36, 39, 63, 0.8)",
+>>>>>>> main
       },
       fontFamily: {
         sans: ["var(--font-prompt)", ...fontFamily.sans],
@@ -31,7 +36,7 @@ module.exports = {
     screens: {
       xs: "480px",
       sm: "620px",
-      md: "768px",
+      md: "891px",
       lg: "1060px",
       xl: "1340px",
     },

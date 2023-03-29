@@ -1,7 +1,7 @@
 import { Button, PageLayout } from "@/component";
 import { PetCard } from "@/component";
 import { Auth } from "aws-amplify";
-import React, { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useUser } from "@/context/AuthContext";
 

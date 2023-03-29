@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-}
+  reactStrictMode: false,
+  env: {
+    google: "AIzaSyCa0-Tlg3hWHLqeN67wYQZ5uZGYSLNioIc",
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
