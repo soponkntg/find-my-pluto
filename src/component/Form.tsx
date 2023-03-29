@@ -2,6 +2,7 @@ import { XCircleIcon } from "@heroicons/react/24/outline";
 import buttonLeft from "../../public/button-left.png";
 import buttonRight from "../../public/button-right.png";
 import buttonPlus from "../../public/button-plus.png";
+import buttonPlusSm from "../../public/button-plus-sm.png";
 import buttonDown from "../../public/button-down.png";
 import buttonFound from "../../public/bone-button-found.png";
 import buttonLost from "../../public/bone-button-lost.png";
@@ -14,7 +15,7 @@ import { Dispatch, SetStateAction, useState, useEffect, useRef } from "react";
 import { Input } from "./Input";
 
 import { CustomSelect } from "./CustomSelect";
-import { dogSpecies } from "@/constant/text";
+import { area, dogSpecies } from "@/constant/text";
 interface Form {
   // userId: string;
   postType: string;
@@ -41,6 +42,10 @@ interface Form {
 export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>> }) => {
   const { register, control, handleSubmit, setValue } = useForm();
   const [page, setPage] = useState<number>(0);
+  const [subdistrict, setSubdistrict] = useState<[{ value: string; label: string }]>([
+    { value: "", label: "" },
+  ]);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const inputRef = useRef(null);
   const [form, setForm] = useState<Form>({
     // userId: "",
@@ -64,9 +69,30 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
     bounty: 0,
   });
 
+  let districts = [];
+  for (const district in area) {
+    districts.push({ value: district, label: district });
+  }
+
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    console.log(page);
     console.log(data);
   };
+
+  const onFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      const urls: string[] = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const fileUrl = URL.createObjectURL(file);
+        urls.push(fileUrl);
+      }
+      setPreviewUrls(urls);
+    }
+  };
+
   return (
     <div className="bg-tertiary w-[400px] h-[500px] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 relative rounded-lg">
       {/* cancel button */}
@@ -147,7 +173,6 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
                         isMulti={false}
                         control={control}
                         name={"gender"}
-                        placeholder={"เลือก"}
                         options={[
                           { value: "เพศผู้", label: "เพศผู้" },
                           { value: "เพศเมีย", label: "เพศเมีย" },
@@ -165,7 +190,6 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
                       isMulti={false}
                       control={control}
                       name={"species"}
-                      placeholder={"สายพันธ์"}
                       options={dogSpecies}
                     />
                   }
@@ -180,11 +204,13 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
                       isMulti={true}
                       control={control}
                       name={"colors"}
-                      placeholder={"สี"}
                       options={[
-                        { value: "#000000", label: "ดำ" },
-                        { value: "#000000", label: "ดำ" },
-                        { value: "#000000", label: "ดำ" },
+                        { value: "brown", label: "น้ำตาล" },
+                        { value: "goldenBrown", label: "น้ำตาลทอง" },
+                        { value: "paleBrown", label: "น้ำตาลอ่อน" },
+                        { value: "black", label: "ดำ" },
+                        { value: "white", label: "ขาว" },
+                        { value: "gray", label: "เทา" },
                       ]}
                     />
                   }
@@ -198,7 +224,6 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
                       isMulti={false}
                       control={control}
                       name={"size"}
-                      placeholder={"ขนาด"}
                       options={[
                         { value: "เล็ก", label: "เล็ก" },
                         { value: "กลาง", label: "กลาง" },
@@ -217,11 +242,18 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
                       isMulti={false}
                       control={control}
                       name={"braceletColor"}
-                      placeholder={"สีปลอกคอ"}
                       options={[
-                        { value: "1", label: "1" },
-                        { value: "2", label: "2" },
-                        { value: "3", label: "3" },
+                        { value: "brown", label: "น้ำตาล" },
+                        { value: "green", label: "เขียว" },
+                        { value: "red", label: "แดง" },
+                        { value: "black", label: "ดำ" },
+                        { value: "white", label: "ขาว" },
+                        { value: "gray", label: "เทา" },
+                        { value: "lightBlue", label: "ฟ้า" },
+                        { value: "blue", label: "น้ำเงิน" },
+                        { value: "purple", label: "ม่วง" },
+                        { value: "orange", label: "ส้ม" },
+                        { value: "yellow", label: "เหลือง" },
                       ]}
                     />
                   }
@@ -281,27 +313,28 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
             </h2>
             <div className="grid gap-4">
               <div className="flex justify-between items-center h-[40px]">
-                <h4 className="text-black  text-xl whitespace-nowrap font-medium">แขวง :</h4>
+                <h4 className="text-black  text-xl whitespace-nowrap font-medium">เขต :</h4>
                 <div className="w-[230px] h-full">
                   {
-                    <Input
-                      id={"animalName"}
-                      type={"text"}
-                      placeholder={"ชื่อน้อง"}
-                      register={register}
+                    <CustomSelect
+                      setSubdistrict={setSubdistrict}
+                      isMulti={false}
+                      control={control}
+                      name={"district"}
+                      options={districts}
                     />
                   }
                 </div>
               </div>
               <div className="flex justify-between items-center h-[40px]">
-                <h4 className="text-black  text-xl whitespace-nowrap font-medium">เขต :</h4>
+                <h4 className="text-black  text-xl whitespace-nowrap font-medium">แขวง :</h4>
                 <div className="w-[230px] h-full">
                   {
-                    <Input
-                      id={"animalName"}
-                      type={"text"}
-                      placeholder={"ชื่อน้อง"}
-                      register={register}
+                    <CustomSelect
+                      isMulti={false}
+                      control={control}
+                      name={"subdistrict"}
+                      options={subdistrict}
                     />
                   }
                 </div>
@@ -395,24 +428,32 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
           <div className="mx-[24px] top-3 grid gap-12">
             <h2 className="font-semibold text-2xl">รูปภาพ</h2>
 
-            <div className="relative w-[260px] h-[260px] rounded-[10px] bg-neutrals-300 overflow-hidden mx-auto">
-              <input
-                className="absolute top-0 right-0 w-full h-full opacity-0 cursor-pointer"
-                type="file"
-                multiple
-                {...register("images")}
-                ref={inputRef}
-              />
-              <button
-                type="button"
-                className="absolute top-0 left-0 w-full h-full  text-white font-medium text-sm flex items-center justify-center transition duration-200 ease-in-out"
-                onClick={() => {
-                  inputRef.current.click();
-                }}
-              >
-                <Image src={buttonPlus} alt={"button plus"} />
-              </button>
-            </div>
+            {previewUrls.length == 0 && (
+              <div className="relative w-[260px] h-[260px] rounded-[10px] bg-neutrals-300 overflow-hidden mx-auto">
+                <input
+                  className="absolute top-0 right-0 w-full h-full opacity-0 cursor-pointer"
+                  type="file"
+                  multiple
+                  {...register("images")}
+                  ref={inputRef}
+                  onChange={onFileInputChange}
+                />
+                <button
+                  type="button"
+                  className="absolute top-0 left-0 w-full h-full  text-white font-medium text-sm flex items-center justify-center transition duration-200 ease-in-out"
+                  onClick={() => {
+                    inputRef.current.click();
+                  }}
+                >
+                  <Image src={buttonPlus} alt={"button plus"} />
+                </button>
+              </div>
+            )}
+            {previewUrls.map((url) => (
+              <div key={url} className="absolute top-16">
+                <img src={url} alt="Preview Image" />
+              </div>
+            ))}
           </div>
         )}
 
@@ -431,17 +472,24 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
               <Image className="m-1" src={buttonLeft} alt={"buttonLeft"} />
             </button>
 
-            <button
-              type={page === 4 ? "submit" : "button"}
-              className="bg-primary rounded-2xl absolute right-[24px] bottom-[20px]"
-              onClick={() => {
-                if (page < 4) {
+            {page < 4 && (
+              <button
+                className="bg-primary rounded-2xl absolute right-[24px] bottom-[20px]"
+                onClick={() => {
                   setPage((oldPage) => oldPage + 1);
-                }
-              }}
-            >
-              <Image className="m-1" src={buttonRight} alt={"buttonRight"} />
-            </button>
+                }}
+              >
+                <Image className="m-1" src={buttonRight} alt={"buttonRight"} />
+              </button>
+            )}
+            {page == 4 && (
+              <button
+                className="bg-primary rounded-2xl absolute right-[24px] bottom-[20px]"
+                type="submit"
+              >
+                <Image className="m-1" src={buttonPlusSm} alt={"buttonPlusSm"} />
+              </button>
+            )}
           </div>
         )}
       </form>
