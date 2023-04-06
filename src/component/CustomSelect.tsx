@@ -6,10 +6,11 @@ import { SelectComponents } from "react-select/dist/declarations/src/components"
 import { ColorTag, colors } from "./ColorTag";
 import { Dispatch, SetStateAction } from "react";
 import { area } from "@/constant/text";
+import { OptionI } from "@/constant/interface";
 
 //cuustom placeholder
 const CustomPlaceholder = () => (
-  <div className="flex absolute items-center text-[#CFCFCF] left-1/2 transform -translate-x-1/2">
+  <div className="flex absolute items-center text-neutrals-800 left-1/2 transform -translate-x-1/2">
     <h4>เลือก</h4>
     <Image src={buttonDown} alt={"buttonDown"} />
   </div>
@@ -34,7 +35,7 @@ const ColorValue = (props) => {
 };
 
 // Define the custom option component
-const ColorOption = (props) => {
+const ColorOption = (props: any) => {
   const matchColor = colors.find((elem) => elem.color == props.data.value);
 
   if (matchColor == undefined) {
@@ -52,7 +53,7 @@ const ColorOption = (props) => {
 };
 
 // Define the custom mutivalue component
-const ColorMulti = (props) => {
+const ColorMulti = (props: any) => {
   const matchColor = colors.find((elem) => elem.color == props.data.value);
 
   if (matchColor == undefined) {
@@ -70,7 +71,7 @@ const ColorMulti = (props) => {
 };
 
 const customStyles = {
-  control: (provided) => ({
+  control: (provided: any) => ({
     ...provided,
     backgroundColor: "#E2E7F0",
     borderRadius: 8,
@@ -78,20 +79,20 @@ const customStyles = {
     boxShadow: "inset 5px 5px 7px 0 rgba(174,174,192,0.4), inset -5px -5px 7px 0 #FFFFFF",
     maxHeight: 40,
   }),
-  valueContainer: (provided) => ({
+  valueContainer: (provided: any) => ({
     ...provided,
-    // overflowX: "auto",
-    // flexWrap: "unset",
+    overflowX: "auto",
+    flexWrap: "unset",
   }),
 
   dropdownIndicator: () => ({
     display: "none",
   }),
-  placeholder: (provided) => ({
+  placeholder: (provided: any) => ({
     ...provided,
     color: "#CFCFCF",
   }),
-  option: (provided, state) => ({
+  option: (provided: any, state: any) => ({
     ...provided,
     backgroundColor: state.isSelected ? "#302A58" : "#fff",
     color: state.isSelected ? "#fff" : "#4a5568",
@@ -100,16 +101,16 @@ const customStyles = {
       color: "#fff",
     },
   }),
-  multiValue: (provided) => ({
+  multiValue: (provided: any) => ({
     ...provided,
     backgroundColor: "#EFEFEF",
-    // flex: "1 0 auto",
+    flex: "1 0 auto",
   }),
-  multiValueLabel: (provided) => ({
+  multiValueLabel: (provided: any) => ({
     ...provided,
     color: "#4a5568",
   }),
-  multiValueRemove: (provided) => ({
+  multiValueRemove: (provided: any) => ({
     ...provided,
     color: "#4a5568",
     ":hover": {
@@ -120,7 +121,7 @@ const customStyles = {
 };
 
 export const CustomSelect = (props: {
-  setSubdistrict?: Dispatch<SetStateAction<[{ value: string; label: string }]>>;
+  setSubdistricts?: Dispatch<SetStateAction<[OptionI]>>;
   isColor?: boolean;
   isMulti: boolean;
   control: Control;
@@ -150,7 +151,7 @@ export const CustomSelect = (props: {
             name={props.name}
             onChange={(selectedOption) => {
               onChange(selectedOption);
-              if (props.setSubdistrict) {
+              if (props.setSubdistricts) {
                 console.log("choose district");
                 const district = area[selectedOption.value];
                 if (district) {
@@ -161,7 +162,7 @@ export const CustomSelect = (props: {
                       label: subdistrict,
                     });
                   }
-                  props.setSubdistrict(temp);
+                  props.setSubdistricts(temp);
                 }
               }
             }}

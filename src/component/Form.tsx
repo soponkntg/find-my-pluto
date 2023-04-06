@@ -3,82 +3,41 @@ import buttonLeft from "../../public/button-left.png";
 import buttonRight from "../../public/button-right.png";
 import buttonPlus from "../../public/button-plus.png";
 import buttonPlusSm from "../../public/button-plus-sm.png";
-import buttonDown from "../../public/button-down.png";
 import buttonFound from "../../public/bone-button-found.png";
 import buttonLost from "../../public/bone-button-lost.png";
 
-import { Controller, FieldValues, SubmitHandler, useForm } from "react-hook-form";
-
-import { TimePicker, DatePicker } from "antd";
-
 import Image from "next/image";
 import { Dispatch, SetStateAction, useState, useEffect, useRef } from "react";
-import { Input } from "./Input";
+import { useRouter } from "next/router";
+import { Controller, FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { TimePicker, DatePicker } from "antd";
+import GoogleMapReact, { Coords } from "google-map-react";
+import axios from "axios";
 
+import { FormI, OptionI } from "@/constant/interface";
+import { Input } from "./Input";
 import { CustomSelect } from "./CustomSelect";
 import { area, dogSpecies } from "@/constant/text";
-import GoogleMapReact, { Coords } from "google-map-react";
 
-interface Form {
-  // userId: string;
-  postType: string;
-  animal: string;
-  images: string[];
-  animalName?: string;
-  age?: number;
-  species: string;
-  colors: string;
-  braceletColor: string;
-  gender: string;
-  size: string;
-  lastSeenAt: string;
-  lastFoundPlace: {
-    province: string;
-    district: string;
-    subditrict: string;
-    lat: number;
-    lng: number;
-  };
-  description: string;
-  bounty: number;
-}
+import { useUser } from "@/context/AuthContext";
 
 export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>> }) => {
+  const router = useRouter();
   const { register, control, handleSubmit, setValue } = useForm();
+
+  const userContext = useUser();
+
+  const [postType, setPostType] = useState<string>("");
   const [page, setPage] = useState<number>(0);
 
-  const [subdistrict, setSubdistrict] = useState<[{ value: string; label: string }]>([
-    { value: "", label: "" },
-  ]);
+  const [subdistricts, setSubdistricts] = useState<[OptionI]>([{ value: "", label: "" }]);
   const [mapVisible, setMapVisible] = useState<boolean>(false);
-  const [center, setCenter] = useState<Coords>({ lat: 13.72433, lng: 100.50917 });
-  const [zoom, setZoom] = useState<number>(12);
+  const [center] = useState<Coords>({ lat: 13.72433, lng: 100.50917 });
+  const [zoom] = useState<number>(12);
   const [markerPosition, setMarkerPosition] = useState<Coords>(center);
-  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
-  const inputRef = useRef(null);
   const mapRef = useRef(null);
 
-  const [form, setForm] = useState<Form>({
-    // userId: "",
-    postType: "",
-    animal: "",
-    images: [],
-    species: "",
-    colors: "",
-    braceletColor: "",
-    gender: "",
-    size: "",
-    lastSeenAt: "",
-    lastFoundPlace: {
-      province: "",
-      district: "",
-      subditrict: "",
-      lat: 0,
-      lng: 0,
-    },
-    description: "",
-    bounty: 0,
-  });
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
   let districts = [];
   for (const district in area) {
@@ -102,16 +61,159 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
         urls.push(fileUrl);
       }
       setPreviewUrls(urls);
+      setValue("images", files);
     }
   };
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(page);
-    console.log(data);
+  const isFormValidate = (data: any) => {
+    if (
+      !data.species ||
+      !data.colors ||
+      !data.gender ||
+      !data.size ||
+      !data.lastSeenDate ||
+      !data.lastSeenTime ||
+      !data.district ||
+      !data.subdistrict ||
+      data.location == "" ||
+      data.name == "" ||
+      data.contact == "" ||
+      (postType == "lost" && data.animalName == "")
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    if (userContext.user) {
+      console.log(data);
+      if (isFormValidate(data)) {
+        try {
+          console.log(data);
+          const form: FormI = {
+            userId: "",
+            postType: "",
+            animal: "หมา",
+            images: [],
+            species: "",
+            colors: "",
+            gender: "",
+            size: "",
+            lastSeenAt: "",
+            lastFoundPlace: {
+              province: "กรุงเทพ",
+              district: "",
+              subdistrict: "",
+              lat: 0,
+              lng: 0,
+            },
+            name: "",
+            contact: "",
+          };
+          const user = userContext.user;
+          const token = userContext.user.signInUserSession.idToken.jwtToken;
+          form.userId = user.attributes.sub;
+          form.postType = postType;
+
+          //prepare imgurl
+          if (data.images) {
+            for (const img of data.images) {
+              const request = await axios.get(
+                "https://orp7ck8zj8.execute-api.ap-southeast-1.amazonaws.com/dev/s3url?imgType=" +
+                  img.type,
+                {
+                  headers: {
+                    Authorization: token,
+                  },
+                }
+              );
+
+              const upoladURL = request.data.message;
+
+              // console.log(upoladURL);
+              // console.log(img);
+
+              if (request.data.status == 200) {
+                const createImage = await fetch(upoladURL, {
+                  method: "PUT",
+                  body: img,
+                  headers: {
+                    "content-type": img.type,
+                  },
+                });
+                console.log(createImage);
+                form.images.push(upoladURL.split("?")[0]);
+              }
+            }
+          }
+
+          form.species = data.species.value;
+          form.colors = data.colors.map((color: OptionI) => color.value);
+          form.size = data.size.value;
+          form.gender = data.gender.value;
+          const date = new Date(
+            data.lastSeenDate["$y"],
+            data.lastSeenDate["$M"],
+            data.lastSeenDate["$D"],
+            data.lastSeenTime["$H"],
+            data.lastSeenTime["$m"]
+          );
+          form.lastSeenAt = date.toISOString();
+          form.lastFoundPlace.district = data.district.value;
+          form.lastFoundPlace.subdistrict = data.subdistrict.value;
+          form.lastFoundPlace.lat = data.location.lat;
+          form.lastFoundPlace.lng = data.location.lng;
+          form.name = data.name;
+          form.contact = data.contact;
+
+          if (data.age) {
+            form.age = data.age;
+          }
+
+          if (data.braceletColor) {
+            form.braceletColor = data.braceletColor.value;
+          }
+          if (data.bounty) {
+            form.bounty = data.bounty;
+          }
+
+          if (data.description != "เพิ่มเติ่ม" && data.description != "") {
+            form.description = data.description;
+          }
+
+          if (data.animalName != "" && postType == "lost") {
+            form.animalName = data.animalName;
+          }
+
+          console.log(form);
+
+          const createCard = await axios.post(
+            "https://orp7ck8zj8.execute-api.ap-southeast-1.amazonaws.com/dev/card",
+            form,
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          );
+
+          if (createCard.data.status == 200) {
+            const cardId = createCard.data.message.animalId;
+            router.push("/" + cardId);
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        console.log("form error");
+      }
+    }
   };
 
   useEffect(() => {
-    const handleMouseDown = (e) => {
+    const handleMouseDown = (e: { target: any }) => {
       if (mapRef.current && !mapRef.current.contains(e.target)) {
         setMapVisible(false);
       }
@@ -138,9 +240,9 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
             <button
               className="w-[352px] h-[110px]"
               onClick={() => {
-                setForm((oldForm: Form) => {
-                  oldForm.postType = "lost";
-                  return oldForm;
+                setPostType((oldPostType) => {
+                  oldPostType = "lost";
+                  return oldPostType;
                 });
                 setPage(1);
               }}
@@ -150,9 +252,9 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
             <button
               className="w-[352px] h-[110px]"
               onClick={() => {
-                setForm((oldForm: Form) => {
-                  oldForm.postType = "found";
-                  return oldForm;
+                setPostType((oldPostType) => {
+                  oldPostType = "found";
+                  return oldPostType;
                 });
                 setPage(1);
               }}
@@ -166,7 +268,7 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
           <div className="mx-[24px] top-3 grid gap-4">
             <h2 className="font-semibold text-2xl">ข้อมูลน้อง</h2>
             <div className="grid gap-4">
-              {form.postType == "lost" && (
+              {postType == "lost" && (
                 <div className="flex justify-between items-center h-[40px]">
                   <h4 className="text-black  text-xl whitespace-nowrap font-medium">ชื่อน้อง :</h4>
                   <div className="w-[230px] h-full">
@@ -182,11 +284,11 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
                 </div>
               )}
 
-              <div className="flex gap-11 h-[40px]">
-                {form.postType == "lost" && (
-                  <div className="flex gap-[10px] h-full items-center">
+              <div className="flex gap-9 h-[40px]">
+                {postType == "lost" && (
+                  <div className="flex gap-3 h-full items-center">
                     <h4 className="text-black  text-xl font-medium">อายุ :</h4>
-                    <div className="w-[87px] h-full">
+                    <div className="w-[80px] h-full">
                       {<Input id={"age"} type={"text"} placeholder={""} register={register} />}
                     </div>
                     <h4 className="text-black  text-xl  font-medium">ปี</h4>
@@ -194,11 +296,11 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
                 )}
                 <div
                   className={`flex h-full items-center ${
-                    form.postType == "lost" ? "gap-3 w-[140px]" : "justify-between w-full"
+                    postType == "lost" ? "gap-3 w-[150px]" : "justify-between w-full"
                   }`}
                 >
                   <h4 className="text-black  text-xl whitespace-nowrap font-medium">เพศ :</h4>
-                  <div className={`${form.postType == "lost" ? "w-full" : "w-[230px]"} h-full`}>
+                  <div className={`${postType == "lost" ? "w-full" : "w-[230px]"} h-full`}>
                     {
                       <CustomSelect
                         isMulti={false}
@@ -248,7 +350,7 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
                 </div>
               </div>
               <div className="flex justify-between items-center h-[40px]">
-                <h4 className="text-black  text-xl whitespace-nowrap font-medium">ขนาด :</h4>
+                <h4 className="text-black text-xl whitespace-nowrap font-medium">ขนาด :</h4>
                 <div className="w-[230px] h-full">
                   {
                     <CustomSelect
@@ -293,14 +395,17 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
             </div>
           </div>
         )}
+
         {page == 2 && (
           <div className="mx-[24px] top-3 grid gap-4">
             <h2 className="font-semibold text-2xl">
-              เวลาที่{form.postType == "lost" ? "น้องหาย" : "พบน้อง"}
+              เวลาที่{postType == "lost" ? "น้องหาย" : "พบน้อง"}
             </h2>
             <div className="grid gap-4">
               <div className="flex justify-between items-center h-[40px]">
-                <h4 className="text-black  text-xl whitespace-nowrap font-medium">วันที่หาย :</h4>
+                <h4 className="text-black  text-xl whitespace-nowrap font-medium">
+                  วันที่{postType == "lost" ? "หาย" : "พบ"} :
+                </h4>
                 <div className="w-[230px] h-full">
                   {
                     <Controller
@@ -308,7 +413,7 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
                       name="lastSeenDate"
                       render={({ field }) => (
                         <DatePicker
-                          className="w-full h-[40px] bg-neutrals-300 shadow-[inset_5px_5px_7px_0_rgba(174,174,192,0.4)] shadow-[inset_-5px_-5px_7px_0_#FFFFFF] rounded-[10px] px-2 placeholder-[#CFCFCF]"
+                          className="w-full h-[40px] bg-neutrals-300 shadow-input rounded-[10px] px-2 placeholder-neutrals-800"
                           onChange={(date) => field.onChange(date)}
                           placeholder="เลือกวัน"
                         />
@@ -318,7 +423,9 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
                 </div>
               </div>
               <div className="flex justify-between items-center h-[40px]">
-                <h4 className="text-black  text-xl whitespace-nowrap font-medium">เวลาที่หาย :</h4>
+                <h4 className="text-black  text-xl whitespace-nowrap font-medium">
+                  เวลาที่{postType == "lost" ? "หาย" : "พบ"} :
+                </h4>
                 <div className="w-[230px] h-full">
                   {
                     <Controller
@@ -326,7 +433,7 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
                       name="lastSeenTime"
                       render={({ field }) => (
                         <TimePicker
-                          className="w-full h-[40px] bg-neutrals-300 shadow-[inset_5px_5px_7px_0_rgba(174,174,192,0.4)] shadow-[inset_-5px_-5px_7px_0_#FFFFFF] rounded-[10px] px-2 placeholder-[#CFCFCF]"
+                          className="w-full h-[40px] bg-neutrals-300 shadow-input rounded-[10px] px-2 placeholder-neutrals-800"
                           onChange={(time) => field.onChange(time)}
                           value={field.value}
                           format="HH:mm"
@@ -340,7 +447,7 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
               </div>
             </div>
             <h2 className="font-semibold text-2xl">
-              สถานที่{form.postType == "lost" ? "น้องหาย" : "พบน้อง"}
+              สถานที่{postType == "lost" ? "น้องหาย" : "พบน้อง"}
             </h2>
             <div className="grid gap-4">
               <div className="flex justify-between items-center h-[40px]">
@@ -348,7 +455,7 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
                 <div className="w-[230px] h-full">
                   {
                     <CustomSelect
-                      setSubdistrict={setSubdistrict}
+                      setSubdistricts={setSubdistricts}
                       isMulti={false}
                       control={control}
                       name={"district"}
@@ -365,7 +472,7 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
                       isMulti={false}
                       control={control}
                       name={"subdistrict"}
-                      options={subdistrict}
+                      options={subdistricts}
                     />
                   }
                 </div>
@@ -376,7 +483,7 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
                   {
                     <div className="w-full h-full">
                       <div
-                        className="hadow-[inset_5px_5px_7px_0_rgba(174,174,192,0.4)] shadow-[inset_-5px_-5px_7px_0_#FFFFFF] bg-neutrals-300 placeholder-[#CFCFCF] rounded-[10px] w-full h-full py-1 px-2 text-black"
+                        className="shadow-input bg-neutrals-300 placeholder-neutrals-800 rounded-[10px] w-full h-full py-1 px-2 text-black"
                         onClick={() => setMapVisible(true)}
                       >
                         {"lat " + markerPosition.lat + " lng: " + markerPosition.lng}
@@ -394,33 +501,33 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
             <h2 className="font-semibold text-2xl">ติดต่อ</h2>
             <div className="grid gap-4">
               <div className="flex justify-between items-center h-[40px]">
-                <h4 className="text-black  text-xl whitespace-nowrap font-medium">ติดต่อคุณ:</h4>
+                <h4 className="text-black  text-xl whitespace-nowrap font-medium">ติดต่อคุณ :</h4>
                 <div className="w-[260px] h-full">
                   {<Input id={"name"} type={"text"} placeholder={"ชื่อ"} register={register} />}
                 </div>
               </div>
               <div className="flex justify-between items-center h-[40px]">
-                <h4 className="text-black  text-xl whitespace-nowrap font-medium">เบอร์โทร:</h4>
+                <h4 className="text-black  text-xl whitespace-nowrap font-medium">Line Id :</h4>
                 <div className="w-[260px] h-full">
                   {
                     <Input
-                      id={"telephone"}
+                      id={"contact"}
                       type={"text"}
-                      placeholder={"เบอร์โทร"}
+                      placeholder={"Line Id"}
                       register={register}
                     />
                   }
                 </div>
               </div>
-              <div className="flex justify-between items-center h-[40px]">
-                <h4 className="text-black  text-xl whitespace-nowrap font-medium">อีเมล:</h4>
+              {/* <div className="flex justify-between items-center h-[40px]">
+                <h4 className="text-black  text-xl whitespace-nowrap font-medium">อีเมล :</h4>
                 <div className="w-[260px] h-full">
                   {<Input id={"email"} type={"text"} placeholder={"อีเมล"} register={register} />}
                 </div>
-              </div>
-              {form.postType == "lost" && (
+              </div> */}
+              {postType == "lost" && (
                 <div className="flex justify-between items-center h-[40px]">
-                  <h4 className="text-black  text-xl whitespace-nowrap font-medium">รางวัล:</h4>
+                  <h4 className="text-black  text-xl whitespace-nowrap font-medium">รางวัล :</h4>
                   <div className="w-[196px] h-full">
                     {
                       <Input
@@ -431,7 +538,7 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
                       />
                     }
                   </div>
-                  <h4 className="text-black  text-xl whitespace-nowrap font-medium">บาท</h4>
+                  <h4 className="text-black text-xl whitespace-nowrap font-medium">บาท</h4>
                 </div>
               )}
 
@@ -449,8 +556,8 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
                         }
                       }}
                       className={`${
-                        !fieldState.isDirty ? "text-[#CFCFCF]" : "text-black"
-                      } shadow-[inset_5px_5px_7px_0_rgba(174,174,192,0.4)] shadow-[inset_-5px_-5px_7px_0_#FFFFFF] p-2 text-lg bg-neutrals-300 rounded-[10px] w-full h-[96px]`}
+                        !fieldState.isDirty ? "text-neutrals-800" : "text-black"
+                      } shadow-input p-2 text-lg bg-neutrals-300 rounded-[10px] w-full h-[96px]`}
                     />
                   </div>
                 )}
@@ -465,19 +572,15 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
             {previewUrls.length == 0 && (
               <div className="relative w-[260px] h-[260px] rounded-[10px] bg-neutrals-300 overflow-hidden mx-auto">
                 <input
-                  className="absolute top-0 right-0 w-full h-full opacity-0 cursor-pointer"
+                  id="images"
+                  className="absolute top-0 right-0 w-full h-full opacity-0 cursor-pointer z-20"
                   type="file"
                   multiple
-                  {...register("images")}
-                  ref={inputRef}
                   onChange={onFileInputChange}
                 />
                 <button
                   type="button"
                   className="absolute top-0 left-0 w-full h-full  text-white font-medium text-sm flex items-center justify-center transition duration-200 ease-in-out"
-                  onClick={() => {
-                    inputRef.current.click();
-                  }}
                 >
                   <Image src={buttonPlus} alt={"button plus"} />
                 </button>
@@ -509,8 +612,7 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
         {/* left and right button */}
         {page != 0 && (
           <div>
-            <button
-              type="button"
+            <div
               className="bg-primary rounded-2xl absolute left-[24px] bottom-[20px]"
               onClick={() => {
                 if (page > 0) {
@@ -519,17 +621,17 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
               }}
             >
               <Image className="m-1" src={buttonLeft} alt={"buttonLeft"} />
-            </button>
+            </div>
 
             {page < 4 && (
-              <button
+              <div
                 className="bg-primary rounded-2xl absolute right-[24px] bottom-[20px]"
                 onClick={() => {
                   setPage((oldPage) => oldPage + 1);
                 }}
               >
                 <Image className="m-1" src={buttonRight} alt={"buttonRight"} />
-              </button>
+              </div>
             )}
             {page == 4 && (
               <button
