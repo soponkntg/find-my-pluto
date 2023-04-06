@@ -1,4 +1,6 @@
 import "@/styles/globals.css";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+
 import { Navbar, NavigationBar } from "@/component";
 import type { AppProps } from "next/app";
 import { Prompt } from "next/font/google";
