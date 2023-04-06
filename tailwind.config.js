@@ -9,6 +9,7 @@ module.exports = {
         navbar: "0px 5px 20px rgba(0, 0, 0, 0.25)",
         filter: "0px 4px 4px rgba(0, 0, 0, 0.25)",
         color: "0px 2px 4px rgba(0, 0, 0, 0.5)",
+        input: "inset -5px -5px 7px #FFFFFF, inset 5px 5px 7px rgba(174, 174, 192, 0.4);",
       },
       backgroundImage: {
         page: "url('/background.jpeg')",
@@ -21,6 +22,10 @@ module.exports = {
         "dim-secondary": "rgba(189, 180, 255, 0.7)",
         dark: "#24273F",
         dimWhite: "#CBD2E0",
+        neutrals: {
+          300: "#E2E7F0",
+          800: "#CFCFCF",
+        },
         "detail-card": "rgba(36, 39, 63, 0.8)",
       },
       fontFamily: {
