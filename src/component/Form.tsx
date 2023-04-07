@@ -5,6 +5,7 @@ import buttonPlus from "../../public/button-plus.png";
 import buttonPlusSm from "../../public/button-plus-sm.png";
 import buttonFound from "../../public/bone-button-found.png";
 import buttonLost from "../../public/bone-button-lost.png";
+import googleMapPin from "../../public/google-map-pin.png";
 
 import Image from "next/image";
 import { Dispatch, SetStateAction, useState, useEffect, useRef } from "react";
@@ -21,6 +22,9 @@ import { area, dogSpecies } from "@/constant/text";
 
 import { useUser } from "@/context/AuthContext";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+
 export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>> }) => {
   const router = useRouter();
   const { register, control, handleSubmit, setValue } = useForm();
@@ -36,6 +40,7 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
   const [zoom] = useState<number>(12);
   const [markerPosition, setMarkerPosition] = useState<Coords>(center);
   const mapRef = useRef(null);
+  const searchBoxRef = useRef<HTMLInputElement>(null);
 
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
@@ -598,6 +603,32 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
             className="z-30 h-[400px] w-[400px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
             ref={mapRef}
           >
+            <div
+              style={{
+                position: "absolute",
+                top: "10px",
+                left: "50%",
+                transform: "translateX(-50%)",
+                zIndex: "1",
+              }}
+            >
+              <div>
+                <input type="text" ref={searchBoxRef} placeholder="Search places" />
+                <button
+                  style={{
+                    position: "absolute",
+                    top: "2px",
+                    left: "92%",
+                    transform: "translateX(-50%)",
+                  }}
+                  onClick={() => {
+                    console.log(searchBoxRef.current?.value);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faSearch} style={{ fontSize: "20px", color: "black" }} />
+                </button>
+              </div>
+            </div>
             <GoogleMapReact
               bootstrapURLKeys={{ key: process.env.google || "" }}
               defaultCenter={center}
@@ -649,7 +680,18 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
 };
 
 const Marker = (props: any) => (
-  <div style={{ position: "absolute", transform: "translate(-50%, -50%)" }}>
-    <img src="https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png" />
+  <div
+    style={{
+      position: "absolute",
+      transform: "translate(-50%, -50%)",
+      width: "50px",
+      height: "82px",
+    }}
+  >
+    <Image
+      style={{ maxWidth: "50%", maxHeight: "50%" }}
+      src={googleMapPin}
+      alt="google map marker"
+    />
   </div>
 );
