@@ -29,3 +29,13 @@ export interface OptionI {
   value: string;
   label: string;
 }
+
+export interface PetCarddI {
+  animalId: string;
+  imageurl: string[];
+  gender: string;
+  bounty?: number;
+  location: string;
+  timestamp: string;
+  expireDate?: Date;
+}
