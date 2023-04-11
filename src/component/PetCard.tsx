@@ -75,10 +75,10 @@ export const PetCard = ({ imageurl, gender, bounty, location, timestamp, expireD
           หาน้องเจอแล้ว
         </button>
         <div className="flex justify-between">
-          <button className="rounded-[25px] w-[117px] h-[45px] text-white text-lg bg-gray-500">
+          {/* <button className="rounded-[25px] w-[117px] h-[45px] text-white text-lg bg-gray-500">
             แก้ไข
-          </button>
-          <button className="rounded-[25px] w-[117px] h-[45px] text-white text-lg bg-red-500">
+          </button> */}
+          <button className="rounded-[25px] w-full h-[45px] text-white text-lg bg-red-500">
             ลบ
           </button>
         </div>
