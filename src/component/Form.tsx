@@ -498,7 +498,9 @@ export const Form = () => {
           {/* left and right button */}
           <div className="w-full flex justify-between items-center mt-4">
             <button
-              className={`bg-primary rounded-2xl ${[1, 2, 3].includes(page) ? "block" : "hidden"}`}
+              className={`bg-primary rounded-2xl ${
+                [1, 2, 3, 4].includes(page) ? "block" : "hidden"
+              }`}
               onClick={() => {
                 if (page > 0) {
                   setPage((oldPage) => oldPage - 1);
