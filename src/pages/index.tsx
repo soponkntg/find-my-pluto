@@ -1,25 +1,21 @@
 import { Button, PageLayout } from "@/component";
 import { PetCard } from "@/component";
 import { Form } from "@/component/Form";
+import { useUI } from "@/context/UIContext";
 import { useState } from "react";
 
 export default function Home() {
-  const [isCreateCard, setIsCreateCard] = useState<Boolean>(false);
-
+  const { toggle, setToggle } = useUI();
+  console.log(toggle);
   return (
     <>
-      {isCreateCard && (
-        <div className="absolute w-full h-full z-20 backdrop-blur-xl ">
-          <Form setIsCreateCard={setIsCreateCard} />
-        </div>
-      )}
       <PageLayout>
         <div className="flex flex-col sm:flex-row space-y-8 sm:space-y-0 sm:space-x-8 z-0">
           <div>
             <div className="flex flex-col items-center p-3 bg-primary shadow-filter rounded-xl space-y-4">
               <h1 className="text-white text-center text-4xl font-bold">ตามหาน้อง</h1>
               <div className="hidden xs:block">
-                <Button onClick={() => setIsCreateCard(true)} />
+                <Button onClick={() => setToggle(true)} />
               </div>
             </div>
           </div>
@@ -80,7 +76,7 @@ export default function Home() {
               animalId={""}
             />
             <div className="xs:hidden sticky bottom-[70px] z-10 ">
-              <Button onClick={() => setIsCreateCard(true)} />
+              <Button onClick={() => setToggle(true)} />
             </div>
           </div>
         </div>

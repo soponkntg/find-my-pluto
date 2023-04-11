@@ -1,6 +1,22 @@
 export const navlink = [
   { id: 1, title: "หาน้อง", slug: "/" },
-  { id: 2, title: "เจอน้อง", slug: "/founddog" },
+  { id: 2, title: "เจอน้อง", slug: "/found-dog" },
+];
+
+export const colors = [
+  { color: "brown", colorTH: "น้ำตาล", colorCode: "bg-[#964B00]", hex: "#964B00" },
+  { color: "goldenBrown", colorTH: "น้ำตาลทอง", colorCode: "bg-[#B77F1B]", hex: "#B77F1B" },
+  { color: "paleBrown", colorTH: "น้ำตาลอ่อน", colorCode: "bg-[#D2B48C]", hex: "#D2B48C" },
+  { color: "black", colorTH: "ดำ", colorCode: "bg-[#000000]", hex: "#000000" },
+  { color: "white", colorTH: "ขาว", colorCode: "bg-[#FFFFFF]", hex: "#FFFFFF" },
+  { color: "gray", colorTH: "เทา", colorCode: "bg-[#616161]", hex: "#616161" },
+  { color: "green", colorTH: "เขียว", colorCode: "bg-[#0B8F00]", hex: "#0B8F00" },
+  { color: "red", colorTH: "แดง", colorCode: "bg-[#EC0000]", hex: "#EC0000" },
+  { color: "lightBlue", colorTH: "ฟ้า", colorCode: "bg-[#81B5E9]", hex: "#81B5E9" },
+  { color: "blue", colorTH: "น้ำเงิน", colorCode: "bg-[#286BAE]", hex: "#286BAE" },
+  { color: "purple", colorTH: "ม่วง", colorCode: "bg-[#9747FF]", hex: "#9747FF" },
+  { color: "orange", colorTH: "ส้ม", colorCode: "bg-[#FF8412]", hex: "#FF8412" },
+  { color: "yellow", colorTH: "เหลือง", colorCode: "bg-[#FFC254]", hex: "#FFC254" },
 ];
 
 export const dogSpecies = [

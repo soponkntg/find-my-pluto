@@ -11,13 +11,12 @@ import { useUser } from "@/context/AuthContext";
 export const Navbar = () => {
   const router = useRouter();
   const userContext = useUser();
-  console.log(userContext);
   return (
     <nav className="bg-primary shadow-navbar flex-center">
-      <div className="w-full max-width flex padding-x justify-between items-center">
+      <div className="w-full max-width flex py-1 padding-x justify-between items-center">
         <div className="relative w-[238px] h-[72px]">
           <Link href={"/"}>
-            <Image src={logo} alt="find-my-pluto" fill />
+            <Image src={logo} alt="find-my-pluto" fill className="bg-contain" />
           </Link>
         </div>
         <ul className="xs:flex list-none space-x-4 hidden">
