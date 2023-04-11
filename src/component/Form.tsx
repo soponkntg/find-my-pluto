@@ -452,6 +452,12 @@ export const Form = () => {
     </div>
   );
 
+  const Marker = () => (
+    <div style={{ position: "absolute", transform: "translate(-50%, -50%)" }}>
+      <MapPinIcon className="w-8 h-8 text-red-500" />
+    </div>
+  );
+
   return (
     <div className="absolute h-full w-full z-20 backdrop-blur-xl px-4">
       {mapVisible && (
@@ -522,9 +528,3 @@ export const Form = () => {
     </div>
   );
 };
-
-const Marker = (props: any) => (
-  <div style={{ position: "absolute", transform: "translate(-50%, -50%)" }}>
-    <MapPinIcon className="w-8 h-8 text-red-500" />
-  </div>
-);
