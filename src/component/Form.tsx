@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 import { Controller, FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { TimePicker, DatePicker } from "antd";
 import GoogleMapReact, { Coords } from "google-map-react";
-import axios from "axios";
+import axios from "../axios.config";
 
 import { FormI, OptionI } from "@/constant/interface";
 
@@ -114,15 +114,11 @@ export const Form = () => {
         //prepare imgurl
         if (data.images) {
           for (const img of data.images) {
-            const request = await axios.get(
-              "https://orp7ck8zj8.execute-api.ap-southeast-1.amazonaws.com/dev/s3url?imgType=" +
-                img.type,
-              {
-                headers: {
-                  Authorization: token,
-                },
-              }
-            );
+            const request = await axios.get("/dev/s3url?imgType=" + img.type, {
+              headers: {
+                Authorization: token,
+              },
+            });
 
             const upoladURL = request.data.message;
 
@@ -177,15 +173,11 @@ export const Form = () => {
           form.animalName = data.animalName;
         }
 
-        const createCard = await axios.post(
-          "https://orp7ck8zj8.execute-api.ap-southeast-1.amazonaws.com/dev/card",
-          form,
-          {
-            headers: {
-              Authorization: token,
-            },
-          }
-        );
+        const createCard = await axios.post("/dev/card", form, {
+          headers: {
+            Authorization: token,
+          },
+        });
 
         if (createCard.data.status == 200) {
           const cardId = createCard.data.message.animalId;

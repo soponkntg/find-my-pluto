@@ -7,17 +7,18 @@ import { FemaleIcon } from "./FemaleIcon";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
+import { PetCarddI } from "@/constant/interface";
 
-type Props = {
-  imageurl: string[];
-  gender: string;
-  bounty?: number;
-  location: string;
-  timestamp: string;
-  expireDate?: Date;
-};
-
-export const PetCard = ({ imageurl, gender, bounty, location, timestamp, expireDate }: Props) => {
+export const PetCard = ({
+  animalId,
+  imageurl,
+  gender,
+  bounty,
+  location,
+  timestamp,
+  expireDate,
+}: PetCarddI) => {
+  const router = useRouter();
   const calTimeDiff = (start: Date, end: Date) => {
     return end.getTime() - start.getTime();
   };
@@ -39,6 +40,9 @@ export const PetCard = ({ imageurl, gender, bounty, location, timestamp, expireD
         className={`w-[300px] h-[400px] rounded-t-xl overflow-hidden relative ${
           pathname == "/profile" ? "shadow-md" : "rounded-b-xl"
         }`}
+        onClick={() => {
+          router.push("/" + animalId);
+        }}
       >
         <Carousel showThumbs={false} autoPlay>
           <Image src={dog} alt="dog" className="object-contain" />
@@ -48,10 +52,12 @@ export const PetCard = ({ imageurl, gender, bounty, location, timestamp, expireD
         <div className="absolute top-2 left-2">
           {gender == "male" ? <MaleIcon /> : <FemaleIcon />}
         </div>
-        <div className="absolute top-0 right-0 rounded-tr-xl rounded-bl-xl w-[120px] h-12 bg-secondary flex-center space-x-2">
-          <Image src={bountyicon} alt={"" + bounty} width={16} height={22} />
-          {bounty && <p className="text-white text-xl">฿{bounty}</p>}
-        </div>
+        {bounty && (
+          <div className="absolute top-0 right-0 rounded-tr-xl rounded-bl-xl w-[120px] h-12 bg-secondary flex-center space-x-2">
+            <Image src={bountyicon} alt={"" + bounty} width={16} height={22} />
+            <p className="text-white text-xl">฿{bounty}</p>
+          </div>
+        )}
         <div className="absolute bottom-0 pt-4 pb-8 px-5 w-full bg-gradient-image">
           <div className="space-x-2 flex-start">
             <MapPinIcon className="text-white w-6 h-6" />
@@ -69,7 +75,7 @@ export const PetCard = ({ imageurl, gender, bounty, location, timestamp, expireD
         } w-[300px] bg-dim-secondary shadow-md rounded-b-xl py-3 px-5 space-y-2`}
       >
         <button className="rounded-[25px] w-full h-[45px] text-white text-lg bg-secondary">
-          {timeLeft > 0 ? `หมดอายุมในอีก: ${secToHour(timeLeft)} วัน` : "ต่ออายุ"}
+          {timeLeft > 0 ? `หมดอายุในอีก: ${secToHour(timeLeft)} วัน` : "ต่ออายุ"}
         </button>
         <button className="rounded-[25px] w-full h-[45px] text-white text-lg bg-dark">
           หาน้องเจอแล้ว

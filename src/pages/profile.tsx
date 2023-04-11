@@ -4,20 +4,90 @@ import { Auth } from "aws-amplify";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useUser } from "@/context/AuthContext";
+import axios from "../axios.config";
+import { PetCarddI } from "@/constant/interface";
 
 const Profile = () => {
   const router = useRouter();
   const [checked, setChecked] = useState(false);
+  const [cards, setCards] = useState<PetCarddI[]>([
+    {
+      imageurl: ["www.google.com"],
+      gender: "male",
+      bounty: 20000,
+      location: "บางโพงพาง, ยานนาวา",
+      timestamp: "21/2/2565 18:00",
+      animalId: "12345",
+    },
+    {
+      imageurl: ["www.google.com"],
+      gender: "male",
+      bounty: 20000,
+      location: "บางโพงพาง, ยานนาวา",
+      timestamp: "21/2/2565 18:00",
+      animalId: "12345",
+    },
+    {
+      imageurl: ["www.google.com"],
+      gender: "male",
+      bounty: 20000,
+      location: "บางโพงพาง, ยานนาวา",
+      timestamp: "21/2/2565 18:00",
+      animalId: "12345",
+    },
+    {
+      imageurl: ["www.google.com"],
+      gender: "male",
+      bounty: 20000,
+      location: "บางโพงพาง, ยานนาวา",
+      timestamp: "21/2/2565 18:00",
+      animalId: "12345",
+    },
+  ]);
   const handleToggle = () => {
     setChecked((prev) => !prev);
+    //swap cards set
   };
   const userContext = useUser();
+  const user = userContext.user;
+  const token = user?.signInUserSession.idToken.jwtToken;
 
   useEffect(() => {
-    if (!userContext.user) {
+    if (!user) {
       router.push("/");
+    } else {
+      //fetch user card
+      const fetchCard = async () => {
+        const getCard = await axios.post("dev/cards", {
+          userId: user.attributes.sub,
+        });
+        console.log(getCard.data);
+        //set card by postType
+      };
+      fetchCard();
     }
-  }, [router, userContext.user]);
+  }, [router, user]);
+
+  const handleDelete = async (animalId: string) => {
+    const deleteCard = await axios.delete(`dev/card/${animalId}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    console.log(deleteCard.data);
+    //setCard => delete that card
+  };
+  const handleExtend = async (animalId: string) => {
+    const extendCard = await axios.put(`dev/extend/${animalId}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    console.log(extendCard.data);
+    //setCard => extend that card
+  };
+
+  const handleEdit = (animalId: string) => {};
 
   return (
     <PageLayout>
@@ -62,41 +132,22 @@ const Profile = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 place-items-center w-full">
-          <PetCard
-            imageurl={["www.google.com"]}
-            gender="male"
-            bounty={20000}
-            location="บางโพงพาง, ยานนาวา"
-            timestamp="21/2/2565 18:00"
-          />
-          <PetCard
-            imageurl={["www.google.com"]}
-            gender="male"
-            bounty={20000}
-            location="บางโพงพาง, ยานนาวา"
-            timestamp="21/2/2565 18:00"
-          />
-          <PetCard
-            imageurl={["www.google.com"]}
-            gender="male"
-            bounty={20000}
-            location="บางโพงพาง, ยานนาวา"
-            timestamp="21/2/2565 18:00"
-          />
-          <PetCard
-            imageurl={["www.google.com"]}
-            gender="male"
-            bounty={20000}
-            location="บางโพงพาง, ยานนาวา"
-            timestamp="21/2/2565 18:00"
-          />
-          <PetCard
-            imageurl={["www.google.com"]}
-            gender="male"
-            bounty={20000}
-            location="บางโพงพาง, ยานนาวา"
-            timestamp="21/2/2565 18:00"
-          />
+          {cards.map((card) => {
+            if (true) {
+              //condition
+              return (
+                <PetCard
+                  key={card.animalId}
+                  animalId={card.animalId}
+                  imageurl={card.imageurl}
+                  gender={card.gender}
+                  location={card.location}
+                  timestamp={card.timestamp}
+                  bounty={card.bounty}
+                />
+              );
+            }
+          })}
           <div className="xs:hidden sticky bottom-[70px] z-10 ">
             <Button />
           </div>
