@@ -452,7 +452,7 @@ export const Form = () => {
     </div>
   );
 
-  const Marker = () => (
+  const Marker = (props: any) => (
     <div style={{ position: "absolute", transform: "translate(-50%, -50%)" }}>
       <MapPinIcon className="w-8 h-8 text-red-500" />
     </div>
@@ -510,14 +510,14 @@ export const Form = () => {
               <Image className="m-1" src={buttonLeft} alt={"buttonLeft"} />
             </button>
 
-            <button
+            <div
               className={`bg-primary rounded-2xl ${[1, 2, 3].includes(page) ? "block" : "hidden"}`}
               onClick={() => {
                 setPage((oldPage) => oldPage + 1);
               }}
             >
               <Image className="m-1" src={buttonRight} alt={"buttonRight"} />
-            </button>
+            </div>
             <button
               className={`bg-primary rounded-2xl ml-auto ${page == 4 ? "block" : "hidden"}`}
               type="submit"
