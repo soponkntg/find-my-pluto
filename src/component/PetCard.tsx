@@ -10,6 +10,7 @@ import { Carousel } from "react-responsive-carousel";
 import { PetCarddI } from "@/constant/interface";
 
 export const PetCard = ({
+  stage,
   animalId,
   imageurl,
   gender,
@@ -17,18 +18,16 @@ export const PetCard = ({
   location,
   timestamp,
   expireDate,
+  handleDelete,
+  handleExtend,
+  handleFinish,
 }: PetCarddI) => {
   const router = useRouter();
-  const calTimeDiff = (start: Date, end: Date) => {
-    return end.getTime() - start.getTime();
+  const calTimeDiff = (start: number, end: number) => {
+    return end - start;
   };
 
   const { pathname } = useRouter();
-  const expire = new Date("2023-05-14");
-
-  const [timeLeft] = useState(calTimeDiff(new Date(), expire));
-
-  const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
 
   const secToHour = (time: number) => {
     return Math.floor(time / (1000 * 60 * 60 * 24));
@@ -39,18 +38,34 @@ export const PetCard = ({
       <div
         className={`w-[300px] h-[400px] rounded-t-xl overflow-hidden relative ${
           pathname == "/profile" ? "shadow-md" : "rounded-b-xl"
-        }`}
+        }
+        ${stage == "finish" ? "rounded-b-xl" : ""}`}
         onClick={() => {
-          router.push("/" + animalId);
+          if (stage == "finding") {
+            router.push("/" + animalId);
+          }
         }}
       >
+        {stage != "finding" && (
+          <div className="w-full h-full absolute z-50 bg-neutrals-800 opacity-50 flex-center">
+            {stage == "expired" && <h3 className=" text-grey/30 text-4xl">หมดอายุ</h3>}
+            {stage == "finish" && <h3 className=" text-grey/30 text-4xl">น้องกลับบ้านแล้ว</h3>}
+          </div>
+        )}
         <Carousel showThumbs={false} autoPlay>
-          <Image src={dog} alt="dog" className="object-contain" />
-          <Image src={dog} alt="dog" className="object-contain" />
-          <Image src={dog} alt="dog" className="object-contain" />
+          {imageurl.map((url, index) => (
+            <Image
+              src={url}
+              alt={url}
+              key={index}
+              width={300}
+              height={400}
+              className="object-contain"
+            />
+          ))}
         </Carousel>
         <div className="absolute top-2 left-2">
-          {gender == "male" ? <MaleIcon /> : <FemaleIcon />}
+          {gender == "เพศผู้" ? <MaleIcon /> : <FemaleIcon />}
         </div>
         {bounty && (
           <div className="absolute top-0 right-0 rounded-tr-xl rounded-bl-xl w-[120px] h-12 bg-secondary flex-center space-x-2">
@@ -69,26 +84,53 @@ export const PetCard = ({
           </div>
         </div>
       </div>
-      <div
-        className={`${
-          pathname == "/profile" ? "block" : "hidden"
-        } w-[300px] bg-dim-secondary shadow-md rounded-b-xl py-3 px-5 space-y-2`}
-      >
-        <button className="rounded-[25px] w-full h-[45px] text-white text-lg bg-secondary">
-          {timeLeft > 0 ? `หมดอายุในอีก: ${secToHour(timeLeft)} วัน` : "ต่ออายุ"}
-        </button>
-        <button className="rounded-[25px] w-full h-[45px] text-white text-lg bg-dark">
-          หาน้องเจอแล้ว
-        </button>
-        <div className="flex justify-between">
-          <button className="rounded-[25px] w-[117px] h-[45px] text-white text-lg bg-gray-500">
+      {stage != "finish" && (
+        <div
+          className={`${
+            pathname == "/profile" ? "block" : "hidden"
+          } w-[300px] bg-dim-secondary shadow-md rounded-b-xl py-3 px-5 space-y-2`}
+        >
+          {expireDate && (
+            <button
+              className="rounded-[25px] w-full h-[45px] text-white text-lg bg-secondary"
+              onClick={() => {
+                if (handleExtend && calTimeDiff(new Date().getTime(), expireDate) < 0) {
+                  handleExtend(animalId);
+                }
+              }}
+            >
+              {calTimeDiff(new Date().getTime(), expireDate) > 0
+                ? `หมดอายุในอีก: ${secToHour(calTimeDiff(new Date().getTime(), expireDate))} วัน`
+                : "ต่ออายุ"}
+            </button>
+          )}
+          <button
+            className="rounded-[25px] w-full h-[45px] text-white text-lg bg-dark"
+            onClick={() => {
+              if (handleFinish) {
+                handleFinish(animalId);
+              }
+            }}
+          >
+            หาน้องเจอแล้ว
+          </button>
+          <div className="flex justify-between">
+            {/* <button className="rounded-[25px] w-[117px] h-[45px] text-white text-lg bg-gray-500">
             แก้ไข
-          </button>
-          <button className="rounded-[25px] w-[117px] h-[45px] text-white text-lg bg-red-500">
-            ลบ
-          </button>
+          </button> */}
+            <button
+              className="rounded-[25px] w-[117px] h-[45px] text-white text-lg bg-red-500"
+              onClick={() => {
+                if (handleDelete) {
+                  handleDelete(animalId);
+                }
+              }}
+            >
+              ลบ
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

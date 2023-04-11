@@ -5,45 +5,79 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useUser } from "@/context/AuthContext";
 import axios from "../axios.config";
-import { PetCarddI } from "@/constant/interface";
+import moment from "moment";
+import { PetCardPreviewI } from "@/constant/interface";
 
 const Profile = () => {
   const router = useRouter();
   const [checked, setChecked] = useState(false);
-  const [cards, setCards] = useState<PetCarddI[]>([
-    {
-      imageurl: ["www.google.com"],
-      gender: "male",
-      bounty: 20000,
-      location: "บางโพงพาง, ยานนาวา",
-      timestamp: "21/2/2565 18:00",
-      animalId: "12345",
-    },
-    {
-      imageurl: ["www.google.com"],
-      gender: "male",
-      bounty: 20000,
-      location: "บางโพงพาง, ยานนาวา",
-      timestamp: "21/2/2565 18:00",
-      animalId: "12345",
-    },
-    {
-      imageurl: ["www.google.com"],
-      gender: "male",
-      bounty: 20000,
-      location: "บางโพงพาง, ยานนาวา",
-      timestamp: "21/2/2565 18:00",
-      animalId: "12345",
-    },
-    {
-      imageurl: ["www.google.com"],
-      gender: "male",
-      bounty: 20000,
-      location: "บางโพงพาง, ยานนาวา",
-      timestamp: "21/2/2565 18:00",
-      animalId: "12345",
-    },
+  const [cards, setCards] = useState<PetCardPreviewI[]>([
+    // {
+    //   postType: "lost",
+    //   images: [
+    //     "https://findmyplutophotobucket.s3.ap-southeast-1.amazonaws.com/06a2930f-ec94-480c-b18c-e4e8cdc7a2d9",
+    //   ],
+    //   gender: "เพศผู้",
+    //   bounty: 20000,
+    //   lastFoundPlace: {
+    //     district: "ยานนาวา",
+    //     subdistrict: "บางโพงพาง",
+    //   },
+    //   lastSeenAt: 1680544860000,
+    //   animalId: "12345",
+    //   expiredAt: 1683331200000,
+    //   stage: "finding",
+    // },
+    // {
+    //   postType: "lost",
+    //   images: [
+    //     "https://findmyplutophotobucket.s3.ap-southeast-1.amazonaws.com/06a2930f-ec94-480c-b18c-e4e8cdc7a2d9",
+    //   ],
+    //   gender: "เพศผู้",
+    //   bounty: 20000,
+    //   lastFoundPlace: {
+    //     district: "ยานนาวา",
+    //     subdistrict: "บางโพงพาง",
+    //   },
+    //   lastSeenAt: 1680544860000,
+    //   animalId: "12345",
+    //   expiredAt: 1683331200000,
+    //   stage: "finding",
+    // },
+    // {
+    //   postType: "lost",
+    //   images: [
+    //     "https://findmyplutophotobucket.s3.ap-southeast-1.amazonaws.com/06a2930f-ec94-480c-b18c-e4e8cdc7a2d9",
+    //   ],
+    //   gender: "เพศผู้",
+    //   bounty: 20000,
+    //   lastFoundPlace: {
+    //     district: "ยานนาวา",
+    //     subdistrict: "บางโพงพาง",
+    //   },
+    //   lastSeenAt: 1680544860000,
+    //   animalId: "12345",
+    //   expiredAt: 1683331200000,
+    //   stage: "finding",
+    // },
+    // {
+    //   postType: "lost",
+    //   images: [
+    //     "https://findmyplutophotobucket.s3.ap-southeast-1.amazonaws.com/06a2930f-ec94-480c-b18c-e4e8cdc7a2d9",
+    //   ],
+    //   gender: "เพศผู้",
+    //   bounty: 20000,
+    //   lastFoundPlace: {
+    //     district: "ยานนาวา",
+    //     subdistrict: "บางโพงพาง",
+    //   },
+    //   lastSeenAt: 1680544860000,
+    //   animalId: "12345",
+    //   expiredAt: 1683331200000,
+    //   stage: "finding",
+    // },
   ]);
+
   const handleToggle = () => {
     setChecked((prev) => !prev);
     //swap cards set
@@ -61,14 +95,19 @@ const Profile = () => {
         const getCard = await axios.post("dev/cards", {
           userId: user.attributes.sub,
         });
-        console.log(getCard.data);
-        //set card by postType
+
+        if (getCard.data.status == 200) {
+          console.log("set card");
+          setCards([]);
+          setCards(getCard.data.message);
+        }
       };
       fetchCard();
     }
-  }, [router, user]);
+  }, [user, router]);
 
   const handleDelete = async (animalId: string) => {
+    console.log("delete:", animalId);
     const deleteCard = await axios.delete(`dev/card/${animalId}`, {
       headers: {
         Authorization: token,
@@ -76,6 +115,11 @@ const Profile = () => {
     });
     console.log(deleteCard.data);
     //setCard => delete that card
+    if (deleteCard.data.status == 200) {
+      setCards((oldCards) => {
+        return oldCards.filter((card) => card.animalId != animalId);
+      });
+    }
   };
   const handleExtend = async (animalId: string) => {
     const extendCard = await axios.put(`dev/extend/${animalId}`, {
@@ -85,8 +129,46 @@ const Profile = () => {
     });
     console.log(extendCard.data);
     //setCard => extend that card
-  };
+    if (extendCard.data.status == 200) {
+      setCards((oldCards) => {
+        const newCards = oldCards.map((card) => {
+          if (card.animalId == animalId) {
+            return { ...card, expiredAt: extendCard.data.message };
+          }
+          return card;
+        });
 
+        return newCards;
+      });
+    }
+  };
+  const handleFinish = async (animalId: string) => {
+    console.log("finish:", animalId);
+    const finishCard = await axios.put(
+      `dev/card/${animalId}`,
+      { stage: "finish" },
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    //setCard => finish that card
+    if (finishCard.data.status == 200) {
+      console.log("set new cards");
+      setCards((oldCards) => {
+        const newCards = oldCards.map((card) => {
+          if (card.animalId == animalId) {
+            return { ...card, stage: finishCard.data.message.stage };
+          }
+          return card;
+        });
+
+        return newCards;
+      });
+    }
+  };
+  //phase2
   const handleEdit = (animalId: string) => {};
 
   return (
@@ -131,23 +213,41 @@ const Profile = () => {
             </button>
           </div>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 place-items-center w-full">
-          {cards.map((card) => {
-            if (true) {
-              //condition
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 place-content-start w-full">
+          {cards
+            .filter((card) => {
+              if (checked) {
+                if (card.postType == "found") {
+                  return true;
+                } else {
+                  return false;
+                }
+              } else {
+                if (card.postType == "lost") {
+                  return true;
+                } else {
+                  return false;
+                }
+              }
+            })
+            .map((card) => {
               return (
                 <PetCard
+                  stage={card.stage}
                   key={card.animalId}
                   animalId={card.animalId}
-                  imageurl={card.imageurl}
+                  imageurl={card.images}
                   gender={card.gender}
-                  location={card.location}
-                  timestamp={card.timestamp}
+                  location={card.lastFoundPlace.subdistrict + ", " + card.lastFoundPlace.district}
+                  timestamp={moment(new Date(card.lastSeenAt)).format("MM/DD/YYYY h:mm")}
                   bounty={card.bounty}
+                  expireDate={card.expiredAt}
+                  handleDelete={handleDelete}
+                  handleExtend={handleExtend}
+                  handleFinish={handleFinish}
                 />
               );
-            }
-          })}
+            })}
           <div className="xs:hidden sticky bottom-[70px] z-10 ">
             <Button />
           </div>

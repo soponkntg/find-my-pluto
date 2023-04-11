@@ -25,39 +25,59 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 place-items-center w-full">
             <PetCard
-              imageurl={["www.google.com"]}
+              stage="finding"
+              imageurl={[
+                "https://findmyplutophotobucket.s3.ap-southeast-1.amazonaws.com/06a2930f-ec94-480c-b18c-e4e8cdc7a2d9",
+              ]}
               gender="male"
               bounty={20000}
               location="บางโพงพาง, ยานนาวา"
               timestamp="21/2/2565 18:00"
+              animalId={""}
             />
             <PetCard
-              imageurl={["www.google.com"]}
+              stage="finding"
+              imageurl={[
+                "https://findmyplutophotobucket.s3.ap-southeast-1.amazonaws.com/06a2930f-ec94-480c-b18c-e4e8cdc7a2d9",
+              ]}
               gender="male"
               bounty={20000}
               location="บางโพงพาง, ยานนาวา"
               timestamp="21/2/2565 18:00"
+              animalId={""}
             />
             <PetCard
-              imageurl={["www.google.com"]}
+              stage="finding"
+              imageurl={[
+                "https://findmyplutophotobucket.s3.ap-southeast-1.amazonaws.com/06a2930f-ec94-480c-b18c-e4e8cdc7a2d9",
+              ]}
               gender="male"
               bounty={20000}
               location="บางโพงพาง, ยานนาวา"
               timestamp="21/2/2565 18:00"
+              animalId={""}
             />
             <PetCard
-              imageurl={["www.google.com"]}
+              stage="finding"
+              imageurl={[
+                "https://findmyplutophotobucket.s3.ap-southeast-1.amazonaws.com/06a2930f-ec94-480c-b18c-e4e8cdc7a2d9",
+              ]}
               gender="male"
               bounty={20000}
               location="บางโพงพาง, ยานนาวา"
               timestamp="21/2/2565 18:00"
+              animalId={""}
             />
             <PetCard
-              imageurl={["www.google.com"]}
+              stage="finding"
+              imageurl={[
+                "https://findmyplutophotobucket.s3.ap-southeast-1.amazonaws.com/06a2930f-ec94-480c-b18c-e4e8cdc7a2d9",
+              ]}
               gender="male"
               bounty={20000}
               location="บางโพงพาง, ยานนาวา"
               timestamp="21/2/2565 18:00"
+              animalId={""}
             />
             <div className="xs:hidden sticky bottom-[70px] z-10 ">
               <Button onClick={() => setIsCreateCard(true)} />

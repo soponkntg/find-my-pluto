@@ -23,6 +23,7 @@
     "eslint-config-next": "13.2.3",
     "fs": "^0.0.1-security",
     "google-map-react": "^2.2.0",
+    "moment": "^2.29.4",
     "next": "13.2.3",
     "react": "18.2.0",
     "react-datepicker": "^4.10.0",

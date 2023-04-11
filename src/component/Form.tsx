@@ -109,7 +109,7 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
               lat: 0,
               lng: 0,
             },
-            name: "",
+            userName: "",
             contact: "",
           };
           const user = userContext.user;
@@ -161,7 +161,7 @@ export const Form = (props: { setIsCreateCard: Dispatch<SetStateAction<Boolean>>
           form.lastFoundPlace.subdistrict = data.subdistrict.value;
           form.lastFoundPlace.lat = data.location.lat;
           form.lastFoundPlace.lng = data.location.lng;
-          form.name = data.name;
+          form.userName = data.name;
           form.contact = data.contact;
 
           if (data.age) {

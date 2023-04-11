@@ -19,7 +19,7 @@ export interface FormI {
     lng: number;
   };
 
-  name: string;
+  userName: string;
   contact: string;
   bounty?: number;
   description?: string;
@@ -31,11 +31,30 @@ export interface OptionI {
 }
 
 export interface PetCarddI {
+  stage: string;
   animalId: string;
   imageurl: string[];
   gender: string;
   bounty?: number;
   location: string;
   timestamp: string;
-  expireDate?: Date;
+  expireDate?: number;
+  handleDelete?(animalId: string): void;
+  handleExtend?(animalId: string): void;
+  handleFinish?(animalId: string): void;
+}
+
+export interface PetCardPreviewI {
+  postType: "lost" | "found";
+  images: string[];
+  gender: "เพศผู้" | "เพศเมีย";
+  bounty: number;
+  lastFoundPlace: {
+    district: string;
+    subdistrict: string;
+  };
+  lastSeenAt: number;
+  animalId: string;
+  expiredAt: number;
+  stage: "finding" | "expired" | "finish";
 }
