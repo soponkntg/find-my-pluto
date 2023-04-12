@@ -1,10 +1,15 @@
+import axios from "@/axios.config";
 import { Button, PageLayout } from "@/component";
 import { PetCard } from "@/component";
 import { Form } from "@/component/Form";
+import { PetCardPreviewI } from "@/constant/interface";
 import { useUI } from "@/context/UIContext";
+import moment from "moment";
+import { GetServerSideProps } from "next";
 import { useState } from "react";
 
-export default function Home() {
+export default function Home({ defaultCards }: { defaultCards: PetCardPreviewI[] }) {
+  const [cards, setCards] = useState<PetCardPreviewI[]>(defaultCards);
   const { toggle, setToggle } = useUI();
   console.log(toggle);
   return (
@@ -20,61 +25,19 @@ export default function Home() {
             </div>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 place-items-center w-full">
-            <PetCard
-              stage="finding"
-              imageurl={[
-                "https://findmyplutophotobucket.s3.ap-southeast-1.amazonaws.com/06a2930f-ec94-480c-b18c-e4e8cdc7a2d9",
-              ]}
-              gender="male"
-              bounty={20000}
-              location="บางโพงพาง, ยานนาวา"
-              timestamp="21/2/2565 18:00"
-              animalId={""}
-            />
-            <PetCard
-              stage="finding"
-              imageurl={[
-                "https://findmyplutophotobucket.s3.ap-southeast-1.amazonaws.com/06a2930f-ec94-480c-b18c-e4e8cdc7a2d9",
-              ]}
-              gender="male"
-              bounty={20000}
-              location="บางโพงพาง, ยานนาวา"
-              timestamp="21/2/2565 18:00"
-              animalId={""}
-            />
-            <PetCard
-              stage="finding"
-              imageurl={[
-                "https://findmyplutophotobucket.s3.ap-southeast-1.amazonaws.com/06a2930f-ec94-480c-b18c-e4e8cdc7a2d9",
-              ]}
-              gender="male"
-              bounty={20000}
-              location="บางโพงพาง, ยานนาวา"
-              timestamp="21/2/2565 18:00"
-              animalId={""}
-            />
-            <PetCard
-              stage="finding"
-              imageurl={[
-                "https://findmyplutophotobucket.s3.ap-southeast-1.amazonaws.com/06a2930f-ec94-480c-b18c-e4e8cdc7a2d9",
-              ]}
-              gender="male"
-              bounty={20000}
-              location="บางโพงพาง, ยานนาวา"
-              timestamp="21/2/2565 18:00"
-              animalId={""}
-            />
-            <PetCard
-              stage="finding"
-              imageurl={[
-                "https://findmyplutophotobucket.s3.ap-southeast-1.amazonaws.com/06a2930f-ec94-480c-b18c-e4e8cdc7a2d9",
-              ]}
-              gender="male"
-              bounty={20000}
-              location="บางโพงพาง, ยานนาวา"
-              timestamp="21/2/2565 18:00"
-              animalId={""}
-            />
+            {cards.map((card) => (
+              <PetCard
+                stage={card.stage}
+                key={card.animalId}
+                animalId={card.animalId}
+                imageurl={card.images}
+                gender={card.gender}
+                location={card.lastFoundPlace.subdistrict + ", " + card.lastFoundPlace.district}
+                timestamp={moment(new Date(card.lastSeenAt)).format("MM/DD/YYYY h:mm")}
+                bounty={card.bounty}
+              />
+            ))}
+
             <div className="xs:hidden sticky bottom-[70px] z-10 ">
               <Button onClick={() => setToggle(true)} />
             </div>
@@ -84,3 +47,13 @@ export default function Home() {
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const res = await axios.post(`/dev/cards`, {
+    postType: "lost",
+  });
+  const defaultCards = res.data.message;
+  return {
+    props: { defaultCards }, // will be passed to the page component as props
+  };
+};

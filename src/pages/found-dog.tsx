@@ -1,7 +1,59 @@
-import { PageLayout } from "@/component";
+import axios from "@/axios.config";
+import { Button, PageLayout, PetCard } from "@/component";
+import { PetCardPreviewI } from "@/constant/interface";
+import { useUI } from "@/context/UIContext";
+import moment from "moment";
+import { GetServerSideProps } from "next";
+import { useState } from "react";
 
-const FoundDog = () => {
-  return <PageLayout>asd</PageLayout>;
+const FoundDog = ({ defaultCards }: { defaultCards: PetCardPreviewI[] }) => {
+  const [cards, setCards] = useState<PetCardPreviewI[]>(defaultCards);
+  const { toggle, setToggle } = useUI();
+  console.log(toggle);
+  return (
+    <>
+      <PageLayout>
+        <div className="flex flex-col sm:flex-row space-y-8 sm:space-y-0 sm:space-x-8 z-0">
+          <div>
+            <div className="flex flex-col items-center p-3 bg-primary shadow-filter rounded-xl space-y-4">
+              <h1 className="text-white text-center text-4xl font-bold">ตามหาเจ้าของ</h1>
+              <div className="hidden xs:block">
+                <Button onClick={() => setToggle(true)} />
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 place-items-center w-full">
+            {cards.map((card) => (
+              <PetCard
+                stage={card.stage}
+                key={card.animalId}
+                animalId={card.animalId}
+                imageurl={card.images}
+                gender={card.gender}
+                location={card.lastFoundPlace.subdistrict + ", " + card.lastFoundPlace.district}
+                timestamp={moment(new Date(card.lastSeenAt)).format("MM/DD/YYYY h:mm")}
+                bounty={card.bounty}
+              />
+            ))}
+
+            <div className="xs:hidden sticky bottom-[70px] z-10 ">
+              <Button onClick={() => setToggle(true)} />
+            </div>
+          </div>
+        </div>
+      </PageLayout>
+    </>
+  );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const res = await axios.post(`/dev/cards`, {
+    postType: "found",
+  });
+  const defaultCards = res.data.message;
+  return {
+    props: { defaultCards }, // will be passed to the page component as props
+  };
 };
 
 export default FoundDog;

@@ -48,7 +48,7 @@ export interface PetCardPreviewI {
   postType: "lost" | "found";
   images: string[];
   gender: "เพศผู้" | "เพศเมีย";
-  bounty: number;
+  bounty?: number;
   lastFoundPlace: {
     district: string;
     subdistrict: string;
@@ -57,4 +57,26 @@ export interface PetCardPreviewI {
   animalId: string;
   expiredAt: number;
   stage: "finding" | "expired" | "finish";
+}
+
+export interface PetCardInfoI extends PetCardPreviewI {
+  userId: string;
+  animal: string; //type of animal
+  animalName?: string;
+  age?: number;
+  species: string;
+  colors: string[];
+  braceletColor?: string;
+  size: "เล็ก" | "กลาง" | "ใหญ่";
+  lastFoundPlace: {
+    lat: number;
+    lng: number;
+    province: string;
+    district: string;
+    subdistrict: string;
+  };
+  userName: string;
+  contact: string;
+  description?: string;
+  createdAt: number;
 }
