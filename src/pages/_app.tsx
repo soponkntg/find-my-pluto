@@ -9,8 +9,8 @@ import { Prompt } from "next/font/google";
 import { Amplify } from "aws-amplify";
 import awsConfig from "../aws-exports";
 import AuthContext from "@/context/AuthContext";
-import UIContext, { useUI } from "@/context/UIContext";
-import { Form } from "@/component/Form";
+import UIContext from "@/context/UIContext";
+import Form from "@/component/Form";
 
 interface Props {
   children: React.ReactElement;

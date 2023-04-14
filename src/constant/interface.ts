@@ -1,10 +1,10 @@
 export interface FormI {
+  animalName?: string;
+  age?: number;
   userId: string;
   postType: string;
   animal: string;
   images: string[];
-  animalName?: string;
-  age?: number;
   species: string;
   colors: string;
   braceletColor?: string;

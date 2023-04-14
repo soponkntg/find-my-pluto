@@ -3,6 +3,11 @@ export const navlink = [
   { id: 2, title: "เจอน้อง", slug: "/found-dog" },
 ];
 
+export const genderOptions = [
+  { value: "เพศผู้", label: "เพศผู้" },
+  { value: "เพศเมีย", label: "เพศเมีย" },
+];
+
 export const colors = [
   { color: "brown", colorTH: "น้ำตาล", colorCode: "bg-[#964B00]", hex: "#964B00" },
   { color: "goldenBrown", colorTH: "น้ำตาลทอง", colorCode: "bg-[#B77F1B]", hex: "#B77F1B" },
@@ -19,7 +24,7 @@ export const colors = [
   { color: "yellow", colorTH: "เหลือง", colorCode: "bg-[#FFC254]", hex: "#FFC254" },
 ];
 
-export const dogSpecies = [
+export const dogSpecieOptions = [
   "เกรทเดน  Great Dane",
   "เกรทเทอร์ สวิสส์ เมาน์เทนด๊อก  Greater Swiss Mountain Dogs",
   "โกลเด้น รีทรีฟเวอร์  Golden Retriever",
@@ -104,6 +109,35 @@ export const dogSpecies = [
 ].map((breed) => {
   return { value: breed, label: breed };
 });
+
+export const colorOptions = [
+  { value: "brown", label: "น้ำตาล" },
+  { value: "goldenBrown", label: "น้ำตาลทอง" },
+  { value: "paleBrown", label: "น้ำตาลอ่อน" },
+  { value: "black", label: "ดำ" },
+  { value: "white", label: "ขาว" },
+  { value: "gray", label: "เทา" },
+];
+
+export const sizeOptions = [
+  { value: "เล็ก", label: "เล็ก" },
+  { value: "กลาง", label: "กลาง" },
+  { value: "ใหญ่", label: "ใหญ่" },
+];
+
+export const bracletColorOptions = [
+  { value: "brown", label: "น้ำตาล" },
+  { value: "green", label: "เขียว" },
+  { value: "red", label: "แดง" },
+  { value: "black", label: "ดำ" },
+  { value: "white", label: "ขาว" },
+  { value: "gray", label: "เทา" },
+  { value: "lightBlue", label: "ฟ้า" },
+  { value: "blue", label: "น้ำเงิน" },
+  { value: "purple", label: "ม่วง" },
+  { value: "orange", label: "ส้ม" },
+  { value: "yellow", label: "เหลือง" },
+];
 
 export const area = {
   คลองสาน: ["สมเด็จเจ้าพระยา", "คลองสาน", "บางลำภูล่าง", "คลองต้นไทร"],

@@ -1,8 +1,6 @@
 import { Button, PageLayout } from "@/component";
 import { PetCard } from "@/component";
-import { Form } from "@/component/Form";
 import { useUI } from "@/context/UIContext";
-import { useState } from "react";
 
 export default function Home() {
   const { toggle, setToggle } = useUI();
