@@ -84,7 +84,7 @@ const Profile = () => {
   };
   const userContext = useUser();
   const user = userContext.user;
-  const token = userContext.user?.getSignInUserSession()?.getAccessToken().getJwtToken();
+  const token = userContext.user?.getSignInUserSession()?.getIdToken().getJwtToken();
 
   useEffect(() => {
     if (!user) {
