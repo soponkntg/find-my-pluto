@@ -80,3 +80,14 @@ export interface PetCardInfoI extends PetCardPreviewI {
   description?: string;
   createdAt: number;
 }
+
+export interface FilterI {
+  genderFilter: string | null;
+  speciesFilter: string | null;
+  colorsFilter: string[] | null;
+  lastSeenDateFilter: string | null;
+  districtFilter: string | null;
+  subdisrictFilter: string | null;
+  latFilter: number | null;
+  lngFilter: number | null;
+}

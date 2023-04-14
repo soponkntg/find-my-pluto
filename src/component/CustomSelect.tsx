@@ -3,16 +3,18 @@ import Image from "next/image";
 import buttonDown from "../../public/button-down.png";
 import Select, { components, DropdownIndicatorProps } from "react-select";
 import { area, colors } from "@/constant/text";
+import { Dispatch, SetStateAction } from "react";
+import { FilterI } from "@/constant/interface";
 
 interface Props {
   label: string;
-  getSubdistrict?: (district: keyof typeof area) => void;
-  isColor?: boolean;
-  isMulti: boolean;
+  getSubdistrict?: (district: keyof typeof area | null) => void;
+  isMulti?: boolean;
   control: Control;
-  options: { value: string; label: string }[];
+  options?: { value: string; label: string }[];
   name: string;
   require: boolean;
+  setFilters?: Dispatch<SetStateAction<FilterI>>;
 }
 
 //cuustom dropdown
@@ -101,31 +103,43 @@ const dot = (color = "transparent") => ({
   },
 });
 
-const customStyles = {
-  container: (provided: any) => ({
-    ...provided,
-    width: "75%",
-  }),
-  control: (provided: any) => ({
-    ...provided,
-    backgroundColor: "#E5E5E5",
-    borderRadius: 8,
-    height: 40,
-  }),
-  valueContainer: (provided: any) => ({
-    ...provided,
-    overflowX: "auto",
-    flexWrap: "nowrap",
-  }),
+export const CustomSelect = (props: Props) => {
+  const customStyles = {
+    container: (provided: any) => ({
+      ...provided,
+      width: props.setFilters ? "100%" : "75%",
+    }),
+    control: (provided: any) => ({
+      ...provided,
+      backgroundColor: "#E5E5E5",
+      borderRadius: 8,
+      height: 40,
+    }),
+    valueContainer: (provided: any) => ({
+      ...provided,
+      overflowX: "auto",
+      flexWrap: "nowrap",
+    }),
 
-  placeholder: (provided: any) => ({
-    ...provided,
-    color: "#CFCFCF",
-  }),
-  option: (provided: any, state: any) => {
-    const color = getColorCode(state.data.value);
+    placeholder: (provided: any) => ({
+      ...provided,
+      color: "#CFCFCF",
+    }),
+    option: (provided: any, state: any) => {
+      const color = getColorCode(state.data.value);
 
-    if (color) {
+      if (color) {
+        return {
+          ...provided,
+          backgroundColor: state.isSelected ? "#302A58" : "#fff",
+          color: state.isSelected ? "#fff" : "#4a5568",
+          ":hover": {
+            backgroundColor: "#8778EE",
+            color: "#fff",
+          },
+          ...dot(color),
+        };
+      }
       return {
         ...provided,
         backgroundColor: state.isSelected ? "#302A58" : "#fff",
@@ -134,44 +148,31 @@ const customStyles = {
           backgroundColor: "#8778EE",
           color: "#fff",
         },
-        ...dot(color),
       };
-    }
-    return {
-      ...provided,
-      backgroundColor: state.isSelected ? "#302A58" : "#fff",
-      color: state.isSelected ? "#fff" : "#4a5568",
-      ":hover": {
-        backgroundColor: "#8778EE",
-        color: "#fff",
-      },
-    };
-  },
-  multiValue: (provided: any, state: any) => {
-    const color = getColorCode(state.data.value);
-    if (color) {
+    },
+    multiValue: (provided: any, state: any) => {
+      const color = getColorCode(state.data.value);
+      if (color) {
+        return {
+          ...provided,
+          ...dot(color),
+          backgroundColor: "#fff",
+          "border-radius": 8,
+          "padding-left": 8,
+          flex: "1 0 auto",
+        };
+      }
       return {
         ...provided,
-        ...dot(color),
-        backgroundColor: "#fff",
-        "border-radius": 8,
-        "padding-left": 8,
+        backgroundColor: "#FFF",
         flex: "1 0 auto",
       };
-    }
-    return {
+    },
+    multiValueLabel: (provided: any) => ({
       ...provided,
-      backgroundColor: "#FFF",
-      flex: "1 0 auto",
-    };
-  },
-  multiValueLabel: (provided: any) => ({
-    ...provided,
-    color: "#4a5568",
-  }),
-};
-
-export const CustomSelect = (props: Props) => {
+      color: "#4a5568",
+    }),
+  };
   return (
     <div className="flex justify-between items-center">
       <label className="text-lg">{props.label}</label>
@@ -182,13 +183,35 @@ export const CustomSelect = (props: Props) => {
         render={({ field: { onChange, onBlur, value, ref } }) => {
           return (
             <Select
+              isClearable={true}
               components={{ DropdownIndicator }}
               styles={customStyles}
               name={props.name}
               onChange={(selectedOption) => {
                 onChange(selectedOption);
                 if (props.getSubdistrict) {
-                  props.getSubdistrict(selectedOption.value);
+                  if (selectedOption) {
+                    props.getSubdistrict(selectedOption.value);
+                  } else {
+                    props.getSubdistrict(null);
+                  }
+                }
+                if (props.setFilters) {
+                  let value: any | null = null;
+                  if (selectedOption) {
+                    if (Array.isArray(selectedOption)) {
+                      value = selectedOption.map((op) => op.value);
+                    } else {
+                      value = selectedOption.value;
+                    }
+                  }
+
+                  props.setFilters((oldFilters) => {
+                    return {
+                      ...oldFilters,
+                      [props.name]: value,
+                    };
+                  });
                 }
               }}
               isMulti={props.isMulti}

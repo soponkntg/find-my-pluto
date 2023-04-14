@@ -58,10 +58,15 @@ export const Form = () => {
     districts.push({ value: district, label: district });
   }
 
-  const getSubdistrict = (district: keyof typeof area) => {
-    const subdistrict = area[district];
-    const temp = subdistrict.map((elem: string) => ({ value: elem, label: elem }));
-    setSubdistricts(temp);
+  const getSubdistrict = (district: keyof typeof area | null) => {
+    if (district) {
+      const subdistrict = area[district];
+      const temp = subdistrict.map((elem: string) => ({ value: elem, label: elem }));
+      setSubdistricts(temp);
+    } else {
+      setSubdistricts([{ value: "", label: "" }]);
+      setValue("subdistrict", "");
+    }
   };
 
   const onMapClick = (event: any) => {
@@ -262,7 +267,6 @@ export const Form = () => {
       />
 
       <CustomSelect
-        isColor={true}
         isMulti={true}
         control={control}
         name={"colors"}
@@ -292,7 +296,6 @@ export const Form = () => {
       />
 
       <CustomSelect
-        isColor={true}
         isMulti={false}
         control={control}
         name={"braceletColor"}
@@ -380,9 +383,9 @@ export const Form = () => {
       <input
         id={"location"}
         type={"hidden"}
-        placeholder={"สถานที่"}
-        value={markerPosition.lat + ", " + markerPosition.lng}
-        className="rounded-[25px] w-full h-[45px] text-white text-lg bg-dark"
+        // placeholder={"สถานที่"}
+        // value={markerPosition.lat + ", " + markerPosition.lng}
+        // className="rounded-[25px] w-full h-[45px] text-white text-lg bg-dark"
       />
     </div>
   );
