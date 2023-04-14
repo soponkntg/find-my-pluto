@@ -36,7 +36,7 @@ export const PetCard = ({
   return (
     <div className="flex flex-col">
       <div
-        className={`w-[300px] h-[400px] rounded-t-xl overflow-hidden relative ${
+        className={`w-[300px] h-[400px] rounded-t-xl overflow-hidden relative cursor-pointer ${
           pathname == "/profile" ? "shadow-md" : "rounded-b-xl"
         }
         ${stage == "finish" ? "rounded-b-xl" : ""}`}
