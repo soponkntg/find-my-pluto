@@ -9,16 +9,18 @@ import Select, {
 } from "react-select";
 import { area, colors } from "@/constant/text";
 import { SelectComponents } from "react-select/dist/declarations/src/components";
-import { OptionI } from "@/constant/interface";
+import { FilterI, OptionI } from "@/constant/interface";
+import { Dispatch, SetStateAction } from "react";
 
 interface Props {
   label: string;
-  getSubdistrict?: (district: keyof typeof area) => void;
-  isMulti: boolean;
+  getSubdistrict?: (district: keyof typeof area | null) => void;
+  isMulti?: boolean;
   control: Control;
   options: { value: string; label: string }[];
   name: string;
   require?: string;
+  setFilters?: Dispatch<SetStateAction<FilterI>>;
 }
 
 //cuustom dropdown
@@ -130,6 +132,7 @@ export const CustomSelect = ({
   isMulti,
   options,
   label,
+  setFilters,
 }: Props) => {
   const components: Partial<SelectComponents<any, boolean, GroupBase<any>>> | undefined = {
     DropdownIndicator: DropdownIndicator,
@@ -142,6 +145,7 @@ export const CustomSelect = ({
       render={({ field: { onChange, value, ref } }) => {
         return (
           <Select
+            isClearable={true}
             components={components}
             styles={customStyles}
             placeholder={"เลือก" + label}
@@ -152,7 +156,28 @@ export const CustomSelect = ({
                 } else {
                   onChange(selectedOption.value);
                   if (getSubdistrict) {
-                    getSubdistrict(selectedOption.value);
+                    if (selectedOption) {
+                      getSubdistrict(selectedOption.value);
+                    } else {
+                      getSubdistrict(null);
+                    }
+                  }
+                  if (setFilters) {
+                    let value: any | null = null;
+                    if (selectedOption) {
+                      if (Array.isArray(selectedOption)) {
+                        value = selectedOption.map((op) => op.value);
+                      } else {
+                        value = selectedOption.value;
+                      }
+                    }
+
+                    setFilters((oldFilters) => {
+                      return {
+                        ...oldFilters,
+                        [name]: value,
+                      };
+                    });
                   }
                 }
               }

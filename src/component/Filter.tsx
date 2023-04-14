@@ -5,9 +5,9 @@ import GoogleMapReact, { Coords } from "google-map-react";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { CustomSelect } from "./CustomSelect";
-import { area, dogSpecies } from "@/constant/text";
+import { area, dogSpecieOptions } from "@/constant/text";
 import { DatePicker } from "antd";
+import { CustomSelect } from "./Form/CustomSelect";
 
 export const Filter = () => {
   const { userLocation } = useUI();
@@ -83,7 +83,7 @@ export const Filter = () => {
       label: "สายพันธ์:",
       isMulti: false,
       name: "speciesFilter",
-      options: dogSpecies,
+      options: dogSpecieOptions,
     },
 
     {

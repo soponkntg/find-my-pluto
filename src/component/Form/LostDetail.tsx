@@ -56,10 +56,14 @@ const LostDetail = ({
     return districtOptions;
   };
 
-  const generateSubdistrictOptions = (district: keyof typeof area) => {
-    const subdistrict = area[district];
-    const subdistrictOptions = subdistrict.map((elem: string) => ({ value: elem, label: elem }));
-    setSubdistrictOptions(subdistrictOptions);
+  const generateSubdistrictOptions = (district: keyof typeof area | null) => {
+    if (district) {
+      const subdistrict = area[district];
+      const subdistrictOptions = subdistrict.map((elem: string) => ({ value: elem, label: elem }));
+      setSubdistrictOptions(subdistrictOptions);
+    } else {
+      setSubdistrictOptions([]);
+    }
   };
 
   return (
