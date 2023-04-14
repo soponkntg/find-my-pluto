@@ -70,7 +70,7 @@ const Form = () => {
     if (user) {
       console.log(formData);
       user.getUserAttributes((err, result) => setUserId(result![0]["Value"]));
-      const token = user.getSignInUserSession()?.getAccessToken().getJwtToken();
+      const token = user.getSignInUserSession()?.getIdToken().getJwtToken();
       try {
         const imagesURL: string[] = [];
         const imagesList = Array.from(images);
