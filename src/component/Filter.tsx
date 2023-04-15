@@ -6,7 +6,6 @@ import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { area, dogSpecieOptions } from "@/constant/text";
-import { DatePicker } from "antd";
 import { CustomSelect } from "./Form/CustomSelect";
 import axios from "@/axios.config";
 
@@ -29,7 +28,7 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
     colorsFilter: null,
     lastSeenDateFilter: null,
     districtFilter: null,
-    subdisrictFilter: null,
+    subdistrictFilter: null,
     latFilter: null,
     lngFilter: null,
   });
@@ -119,6 +118,7 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
   ];
 
   useEffect(() => {
+    console.log(filters);
     const fetchCards = async () => {
       const body = {
         postType: path == "/" ? "lost" : "found",
@@ -128,7 +128,7 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
         lastSeenFrom: filters.lastSeenDateFilter,
         lastFoundPlace: {
           district: filters.districtFilter,
-          subdistrict: filters.subdisrictFilter,
+          subdistrict: filters.subdistrictFilter,
           lat: filters.latFilter,
           lng: filters.lngFilter,
         },
@@ -136,11 +136,10 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
 
       console.log("body", body);
       const res = await axios.post(`/dev/cards`, body);
-
+      setCards(res.data.message);
       console.log("res", res.data);
     };
     fetchCards();
-    console.log(filters);
   }, [filters]);
 
   return (
@@ -207,15 +206,18 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
                     getSubdistrict={f.getSubdistrict}
                   />
                 ) : (
-                  <DatePicker
-                    className="w-full h-10 bg-neutral-200 rounded-lg px-2 placeholder-neutrals-800"
-                    name={f.name}
-                    placeholder="เลือกวัน"
-                    onChange={(date) => {
+                  <input
+                    type="datetime-local"
+                    className="w-full bg-neutral-200 font-sans rounded-lg h-10 px-2 text-neutral-800 leading-tight focus:outline-none focus:ring-[#2684FF] focus:ring-2"
+                    onChange={(value) => {
+                      let date: string | null = null;
+                      if (value.currentTarget.value) {
+                        date = new Date(value.currentTarget.value).toISOString();
+                      }
                       setFilters((oldFilters) => {
                         return {
                           ...oldFilters,
-                          lastSeenDateFilter: date ? date.toISOString() : null,
+                          lastSeenDateFilter: date,
                         };
                       });
                     }}

@@ -87,7 +87,7 @@ export interface FilterI {
   colorsFilter: string[] | null;
   lastSeenDateFilter: string | null;
   districtFilter: string | null;
-  subdisrictFilter: string | null;
+  subdistrictFilter: string | null;
   latFilter: number | null;
   lngFilter: number | null;
 }

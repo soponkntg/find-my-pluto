@@ -1,5 +1,6 @@
 import axios from "@/axios.config";
 import { Button, PageLayout, PetCard } from "@/component";
+import { Filter } from "@/component/Filter";
 import { PetCardPreviewI } from "@/constant/interface";
 import { useUI } from "@/context/UIContext";
 import moment from "moment";
@@ -17,12 +18,13 @@ const FoundDog = ({ defaultCards }: { defaultCards: PetCardPreviewI[] }) => {
           <div>
             <div className="flex flex-col items-center p-3 bg-primary shadow-filter rounded-xl space-y-4">
               <h1 className="text-white text-center text-4xl font-bold">ตามหาเจ้าของ</h1>
+              <Filter setCards={setCards} />
               <div className="hidden xs:block">
                 <Button onClick={() => setToggle(true)} />
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 place-items-center w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6  place-items-center md:place-items-start w-full">
             {cards.map((card) => (
               <PetCard
                 stage={card.stage}
