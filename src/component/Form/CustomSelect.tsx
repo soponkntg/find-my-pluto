@@ -149,7 +149,23 @@ export const CustomSelect = ({
             components={components}
             styles={customStyles}
             placeholder={"เลือก" + label}
-            onChange={(selectedOption) => {
+            onChange={(selectedOption, { action }) => {
+              //clear case
+              if (action == "clear") {
+                onChange();
+                if (getSubdistrict) {
+                  getSubdistrict(null);
+                }
+                if (setFilters) {
+                  setFilters((oldFilters) => {
+                    return {
+                      ...oldFilters,
+                      [name]: null,
+                    };
+                  });
+                }
+              }
+
               if (selectedOption) {
                 if (isMulti) {
                   onChange(selectedOption.map((elem: OptionI) => elem.value));

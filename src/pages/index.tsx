@@ -2,7 +2,6 @@ import axios from "@/axios.config";
 import { Button, PageLayout } from "@/component";
 import { PetCard } from "@/component";
 import { Filter } from "@/component/Filter";
-import { Form } from "@/component/Form";
 import { useUI } from "@/context/UIContext";
 import { PetCardPreviewI } from "@/constant/interface";
 import moment from "moment";
@@ -12,7 +11,6 @@ import { useState } from "react";
 export default function Home({ defaultCards }: { defaultCards: PetCardPreviewI[] }) {
   const [cards, setCards] = useState<PetCardPreviewI[]>(defaultCards);
   const { toggle, setToggle } = useUI();
-  console.log(toggle);
   return (
     <>
       <PageLayout>
@@ -20,7 +18,7 @@ export default function Home({ defaultCards }: { defaultCards: PetCardPreviewI[]
           <div>
             <div className="flex flex-col items-center p-3 bg-primary shadow-filter rounded-xl space-y-4">
               <h1 className="text-white text-center text-4xl font-bold">ตามหาน้อง</h1>
-              <Filter />
+              <Filter setCards={setCards} />
               <div className="hidden xs:block">
                 <Button onClick={() => setToggle(true)} />
               </div>

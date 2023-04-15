@@ -1,22 +1,23 @@
-import { FilterI, OptionI } from "@/constant/interface";
+import { FilterI, OptionI, PetCardPreviewI } from "@/constant/interface";
 import { useUI } from "@/context/UIContext";
 import { MapPinIcon } from "@heroicons/react/24/outline";
 import GoogleMapReact, { Coords } from "google-map-react";
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { area, dogSpecieOptions } from "@/constant/text";
 import { DatePicker } from "antd";
 import { CustomSelect } from "./Form/CustomSelect";
+import axios from "@/axios.config";
 
-export const Filter = () => {
+export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCardPreviewI[]>> }) => {
   const { userLocation } = useUI();
   const router = useRouter();
   const path = router.pathname;
   const { control, handleSubmit, setValue } = useForm();
 
   const [subdistricts, setSubdistricts] = useState<OptionI[]>([{ value: "", label: "" }]);
-  //   const [mapVisible, setMapVisible] = useState<boolean>(false);
+  const [mapVisible, setMapVisible] = useState<boolean>(false);
   const center = userLocation;
   const zoom = 12;
   const [markerPosition, setMarkerPosition] = useState<Coords>(center);
@@ -38,30 +39,27 @@ export const Filter = () => {
     districts.push({ value: district, label: district });
   }
 
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {};
-
   const getSubdistrict = (district: keyof typeof area | null) => {
     if (district) {
       const subdistrict = area[district];
       const temp = subdistrict.map((elem: string) => ({ value: elem, label: elem }));
       setSubdistricts(temp);
     } else {
-      setSubdistricts([{ value: "", label: "" }]);
-      setValue("subdistrictFilter", "");
+      setSubdistricts([]);
     }
   };
 
-  //   const onMapClick = (event: any) => {
-  //     const { lat, lng } = event;
-  //     setMarkerPosition({ lat, lng });
-  //     setFilters((oldFilter) => {
-  //       return {
-  //         ...oldFilter,
-  //         latFilter: lat,
-  //         lngFilter: lng,
-  //       };
-  //     });
-  //   };
+  const onMapClick = (event: any) => {
+    const { lat, lng } = event;
+    setMarkerPosition({ lat, lng });
+    setFilters((oldFilter) => {
+      return {
+        ...oldFilter,
+        latFilter: lat,
+        lngFilter: lng,
+      };
+    });
+  };
 
   const Marker = (props: any) => (
     <div style={{ position: "absolute", transform: "translate(-50%, -50%)" }}>
@@ -120,10 +118,35 @@ export const Filter = () => {
     },
   ];
 
+  useEffect(() => {
+    const fetchCards = async () => {
+      const body = {
+        postType: path == "/" ? "lost:" : "found:",
+        gender: filters.genderFilter,
+        species: filters.speciesFilter,
+        colors: filters.colorsFilter,
+        lastSeenFrom: filters.lastSeenDateFilter,
+        lastFoundPlace: {
+          district: filters.districtFilter,
+          subdistrict: filters.subdisrictFilter,
+          lat: filters.latFilter,
+          lng: filters.lngFilter,
+        },
+      };
+      const res = await axios.post(`/dev/cards`, {
+        body,
+      });
+
+      console.log(res.data);
+    };
+    fetchCards();
+    console.log(filters);
+  }, [filters]);
+
   return (
     <div className="w-[340px] h-[630px] bg-tertiary rounded-lg">
-      {/* {mapVisible && (
-        <div className="z-30 h-5/6 w-full absolute" ref={mapRef}>
+      {mapVisible && (
+        <div className="z-30 h-5/6 w-5/6 absolute" ref={mapRef}>
           <GoogleMapReact
             bootstrapURLKeys={{ key: process.env.google || "" }}
             defaultCenter={center}
@@ -134,27 +157,41 @@ export const Filter = () => {
           </GoogleMapReact>
           <div className="absolute space-x-3 bottom-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
             <button
-              className="rounded-[25px] w-[300px] h-[45px] text-white text-lg bg-dark"
+              className="rounded-[25px] w-[200px] h-[45px] text-white text-lg bg-dark"
               onClick={() => {
                 setMapVisible(false);
+                setFilters((oldFilters) => {
+                  return {
+                    ...oldFilters,
+                    latFilter: markerPosition.lat,
+                    lngFilter: markerPosition.lng,
+                  };
+                });
               }}
             >
               ยืนยัน
             </button>
             <button
-              className="rounded-[25px] w-[300px] h-[45px] text-white text-lg bg-red-500"
+              className="rounded-[25px] w-[200px] h-[45px] text-white text-lg bg-red-500"
               onClick={() => {
                 setMapVisible(false);
+                setFilters((oldFilters) => {
+                  return {
+                    ...oldFilters,
+                    latFilter: null,
+                    lngFilter: null,
+                  };
+                });
               }}
             >
               ยกเลิก
             </button>
           </div>
         </div>
-      )} */}
+      )}
       <div className="py-6 px-6 z-10">
         <h3 className="font-bold text-2xl">ค้นหาน้อง</h3>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div className="space-y-4">
           {filtersParameter.map((f, index) => {
             return (
               <div key={index}>
@@ -165,8 +202,7 @@ export const Filter = () => {
                     isMulti={f.isMulti}
                     control={control}
                     name={f.name}
-                    require={false}
-                    options={f.options}
+                    options={f.options ? f.options : []}
                     setFilters={setFilters}
                     getSubdistrict={f.getSubdistrict}
                   />
@@ -176,20 +212,25 @@ export const Filter = () => {
                     name={f.name}
                     placeholder="เลือกวัน"
                     onChange={(date) => {
-                      console.log(date);
+                      setFilters((oldFilters) => {
+                        return {
+                          ...oldFilters,
+                          lastSeenDateFilter: date ? date.toISOString() : null,
+                        };
+                      });
                     }}
                   />
                 )}
               </div>
             );
           })}
-          {/* <button
+          <button
             className="rounded-[25px] w-full h-[45px] text-white text-lg bg-dark"
             onClick={() => setMapVisible(true)}
           >
             ปักหมุด
-          </button> */}
-        </form>
+          </button>
+        </div>
       </div>
     </div>
   );
