@@ -121,7 +121,7 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
   useEffect(() => {
     const fetchCards = async () => {
       const body = {
-        postType: path == "/" ? "lost:" : "found:",
+        postType: path == "/" ? "lost" : "found",
         gender: filters.genderFilter,
         species: filters.speciesFilter,
         colors: filters.colorsFilter,
@@ -133,11 +133,11 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
           lng: filters.lngFilter,
         },
       };
-      const res = await axios.post(`/dev/cards`, {
-        body,
-      });
 
-      console.log(res.data);
+      console.log("body", body);
+      const res = await axios.post(`/dev/cards`, body);
+
+      console.log("res", res.data);
     };
     fetchCards();
     console.log(filters);
@@ -207,19 +207,20 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
                     getSubdistrict={f.getSubdistrict}
                   />
                 ) : (
-                  <DatePicker
-                    className="w-full h-10 bg-neutral-200 rounded-lg px-2 placeholder-neutrals-800"
-                    name={f.name}
-                    placeholder="เลือกวัน"
-                    onChange={(date) => {
-                      setFilters((oldFilters) => {
-                        return {
-                          ...oldFilters,
-                          lastSeenDateFilter: date ? date.toISOString() : null,
-                        };
-                      });
-                    }}
-                  />
+                  <div />
+                  // <DatePicker
+                  //   className="w-full h-10 bg-neutral-200 rounded-lg px-2 placeholder-neutrals-800"
+                  //   name={f.name}
+                  //   placeholder="เลือกวัน"
+                  //   onChange={(date) => {
+                  //     setFilters((oldFilters) => {
+                  //       return {
+                  //         ...oldFilters,
+                  //         lastSeenDateFilter: date ? date.toISOString() : null,
+                  //       };
+                  //     });
+                  //   }}
+                  // />
                 )}
               </div>
             );
