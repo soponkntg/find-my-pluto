@@ -85,8 +85,8 @@ const Profile = () => {
   };
   const userContext = useUser();
   const user = userContext.user;
+  const token = userContext.user?.getSignInUserSession()?.getIdToken().getJwtToken();
   user?.getUserAttributes((err, result) => setUserId(result![0]["Value"]));
-
   useEffect(() => {
     if (!user) {
       router.push("/");
