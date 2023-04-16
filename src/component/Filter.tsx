@@ -118,7 +118,7 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
   ];
 
   useEffect(() => {
-    console.log(filters);
+    // console.log(filters);
     const fetchCards = async () => {
       const body = {
         postType: path == "/" ? "lost" : "found",
@@ -134,10 +134,10 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
         },
       };
 
-      console.log("body", body);
+      //   console.log("body", body);
       const res = await axios.post(`/dev/cards`, body);
       setCards(res.data.message);
-      console.log("res", res.data);
+      //   console.log("res", res.data);
     };
     fetchCards();
   }, [filters]);

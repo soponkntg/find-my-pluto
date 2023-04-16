@@ -97,7 +97,7 @@ const Profile = () => {
         });
 
         if (getCard.data.status == 200) {
-          console.log("set card");
+          // console.log("set card");
           setCards([]);
           setCards(getCard.data.message);
         }
@@ -107,13 +107,12 @@ const Profile = () => {
   }, [user, router]);
 
   const handleDelete = async (animalId: string) => {
-    console.log("delete:", animalId);
+    // console.log("delete:", animalId);
     const deleteCard = await axios.delete(`dev/card/${animalId}`, {
       headers: {
         Authorization: token,
       },
     });
-    console.log(deleteCard.data);
     //setCard => delete that card
     if (deleteCard.data.status == 200) {
       setCards((oldCards) => {
@@ -127,7 +126,6 @@ const Profile = () => {
         Authorization: token,
       },
     });
-    console.log(extendCard.data);
     //setCard => extend that card
     if (extendCard.data.status == 200) {
       setCards((oldCards) => {
@@ -143,7 +141,7 @@ const Profile = () => {
     }
   };
   const handleFinish = async (animalId: string) => {
-    console.log("finish:", animalId);
+    // console.log("finish:", animalId);
     const finishCard = await axios.put(
       `dev/card/${animalId}`,
       { stage: "finish" },
@@ -155,7 +153,6 @@ const Profile = () => {
     );
     //setCard => finish that card
     if (finishCard.data.status == 200) {
-      console.log("set new cards");
       setCards((oldCards) => {
         const newCards = oldCards.map((card) => {
           if (card.animalId == animalId) {

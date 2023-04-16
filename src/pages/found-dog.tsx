@@ -10,7 +10,7 @@ import { useState } from "react";
 const FoundDog = ({ defaultCards }: { defaultCards: PetCardPreviewI[] }) => {
   const [cards, setCards] = useState<PetCardPreviewI[]>(defaultCards);
   const { toggle, setToggle } = useUI();
-  console.log(toggle);
+
   return (
     <>
       <PageLayout>

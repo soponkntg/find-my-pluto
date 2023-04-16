@@ -68,7 +68,7 @@ const Form = () => {
   // submit form
   const submitForm = async (images: FileList) => {
     if (user) {
-      console.log(formData);
+      // console.log(formData);
       user.getUserAttributes((err, result) => setUserId(result![0]["Value"]));
       const token = user.getSignInUserSession()?.getIdToken().getJwtToken();
       try {

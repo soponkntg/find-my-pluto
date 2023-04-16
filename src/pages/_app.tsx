@@ -29,7 +29,8 @@ const ContextProvider = ({ children }: Props) => (
 );
 
 export default function App({ Component, pageProps }: AppProps) {
-  const isLocalhost = process.env.NODE_ENV === "development";
+  const isLocalhost = process.env.NODEENV === "development";
+  console.log(process.env.NODEENV);
 
   const [localRedirectSignIn, productionRedirectSignIn] = awsConfig.oauth.redirectSignIn.split(",");
 
