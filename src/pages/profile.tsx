@@ -10,6 +10,7 @@ import { PetCardPreviewI } from "@/constant/interface";
 
 const Profile = () => {
   const router = useRouter();
+  const [userId, setUserId] = useState<string>();
   const [checked, setChecked] = useState(false);
   const [cards, setCards] = useState<PetCardPreviewI[]>([
     // {
@@ -84,7 +85,7 @@ const Profile = () => {
   };
   const userContext = useUser();
   const user = userContext.user;
-  const token = userContext.user?.getSignInUserSession()?.getIdToken().getJwtToken();
+  user?.getUserAttributes((err, result) => setUserId(result![0]["Value"]));
 
   useEffect(() => {
     if (!user) {
@@ -93,7 +94,7 @@ const Profile = () => {
       //fetch user card
       const fetchCard = async () => {
         const getCard = await axios.post("dev/cards", {
-          userId: user.attributes.sub,
+          userId,
         });
 
         if (getCard.data.status == 200) {
