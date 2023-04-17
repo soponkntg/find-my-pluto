@@ -1,7 +1,6 @@
 import axios from "@/axios.config";
 import { FormI } from "@/constant/interface";
-import { useUser } from "@/context/AuthContext";
-import { useUI } from "@/context/DataContext";
+import { useDataContext } from "@/context/DataContext";
 import { XCircleIcon } from "@heroicons/react/24/outline";
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import GoogleMapReact, { Coords } from "google-map-react";
@@ -42,10 +41,7 @@ const Marker = (props: any) => (
 );
 
 const Form = () => {
-  const { toggle, closeToggle, userLocation } = useUI();
-  const { user } = useUser();
-
-  const [userId, setUserId] = useState<string>();
+  const { toggle, closeForm, userLocation, userId, userToken } = useDataContext();
 
   const [formData, setFormData] = useState<FormI>(form);
 
@@ -67,17 +63,14 @@ const Form = () => {
 
   // submit form
   const submitForm = async (images: FileList) => {
-    if (user) {
-      // console.log(formData);
-      user.getUserAttributes((err, result) => setUserId(result![0]["Value"]));
-      const token = user.getSignInUserSession()?.getIdToken().getJwtToken();
+    if (userToken && userId) {
       try {
         const imagesURL: string[] = [];
         const imagesList = Array.from(images);
         for (const img of imagesList) {
           const request = await axios.get("/dev/s3url?imgType=" + img.type, {
             headers: {
-              Authorization: token,
+              Authorization: userToken,
             },
           });
           const uploadURL = request.data.message;
@@ -96,7 +89,7 @@ const Form = () => {
         const form: FormI = { ...formData, images: imagesURL, userId: userId! };
         const createCard = await axios.post("/dev/card", form, {
           headers: {
-            Authorization: token,
+            Authorization: userToken,
           },
         });
         if (createCard.data.status == 200) {
@@ -142,7 +135,7 @@ const Form = () => {
 
       <div className="bg-tertiary max-w-[800px] px-8 pt-12 pb-4 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 relative rounded-2xl">
         {/* cancel button */}
-        <button onClick={closeToggle} className="top-[12px] right-[12px] absolute">
+        <button onClick={closeForm} className="top-[12px] right-[12px] absolute">
           <XCircleIcon className={`w-7 h-7`} />
         </button>
 
