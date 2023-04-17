@@ -3,7 +3,7 @@ import { PetCard } from "@/component";
 import { Auth } from "aws-amplify";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useUser } from "@/context/AuthContext";
+import { useDataContext } from "@/context/DataContext";
 import axios from "../axios.config";
 import moment from "moment";
 import { PetCardPreviewI } from "@/constant/interface";
@@ -11,106 +11,37 @@ import { PetCardPreviewI } from "@/constant/interface";
 const Profile = () => {
   const router = useRouter();
   const [checked, setChecked] = useState(false);
-  const [cards, setCards] = useState<PetCardPreviewI[]>([
-    // {
-    //   postType: "lost",
-    //   images: [
-    //     "https://findmyplutophotobucket.s3.ap-southeast-1.amazonaws.com/06a2930f-ec94-480c-b18c-e4e8cdc7a2d9",
-    //   ],
-    //   gender: "เพศผู้",
-    //   bounty: 20000,
-    //   lastFoundPlace: {
-    //     district: "ยานนาวา",
-    //     subdistrict: "บางโพงพาง",
-    //   },
-    //   lastSeenAt: 1680544860000,
-    //   animalId: "12345",
-    //   expiredAt: 1683331200000,
-    //   stage: "finding",
-    // },
-    // {
-    //   postType: "lost",
-    //   images: [
-    //     "https://findmyplutophotobucket.s3.ap-southeast-1.amazonaws.com/06a2930f-ec94-480c-b18c-e4e8cdc7a2d9",
-    //   ],
-    //   gender: "เพศผู้",
-    //   bounty: 20000,
-    //   lastFoundPlace: {
-    //     district: "ยานนาวา",
-    //     subdistrict: "บางโพงพาง",
-    //   },
-    //   lastSeenAt: 1680544860000,
-    //   animalId: "12345",
-    //   expiredAt: 1683331200000,
-    //   stage: "finding",
-    // },
-    // {
-    //   postType: "lost",
-    //   images: [
-    //     "https://findmyplutophotobucket.s3.ap-southeast-1.amazonaws.com/06a2930f-ec94-480c-b18c-e4e8cdc7a2d9",
-    //   ],
-    //   gender: "เพศผู้",
-    //   bounty: 20000,
-    //   lastFoundPlace: {
-    //     district: "ยานนาวา",
-    //     subdistrict: "บางโพงพาง",
-    //   },
-    //   lastSeenAt: 1680544860000,
-    //   animalId: "12345",
-    //   expiredAt: 1683331200000,
-    //   stage: "finding",
-    // },
-    // {
-    //   postType: "lost",
-    //   images: [
-    //     "https://findmyplutophotobucket.s3.ap-southeast-1.amazonaws.com/06a2930f-ec94-480c-b18c-e4e8cdc7a2d9",
-    //   ],
-    //   gender: "เพศผู้",
-    //   bounty: 20000,
-    //   lastFoundPlace: {
-    //     district: "ยานนาวา",
-    //     subdistrict: "บางโพงพาง",
-    //   },
-    //   lastSeenAt: 1680544860000,
-    //   animalId: "12345",
-    //   expiredAt: 1683331200000,
-    //   stage: "finding",
-    // },
-  ]);
+  const [cards, setCards] = useState<PetCardPreviewI[]>([]);
 
   const handleToggle = () => {
     setChecked((prev) => !prev);
     //swap cards set
   };
-  const userContext = useUser();
-  const user = userContext.user;
-  const token = userContext.user?.getSignInUserSession()?.getIdToken().getJwtToken();
+  const { userId, userToken } = useDataContext();
 
   useEffect(() => {
-    if (!user) {
+    if (!(userId && userToken)) {
       router.push("/");
     } else {
       //fetch user card
       const fetchCard = async () => {
         const getCard = await axios.post("dev/cards", {
-          userId: user.attributes.sub,
+          userId,
         });
 
         if (getCard.data.status == 200) {
-          // console.log("set card");
           setCards([]);
           setCards(getCard.data.message);
         }
       };
       fetchCard();
     }
-  }, [user, router]);
+  }, [userId, userToken, router]);
 
   const handleDelete = async (animalId: string) => {
-    // console.log("delete:", animalId);
     const deleteCard = await axios.delete(`dev/card/${animalId}`, {
       headers: {
-        Authorization: token,
+        Authorization: userToken,
       },
     });
     //setCard => delete that card
@@ -123,7 +54,7 @@ const Profile = () => {
   const handleExtend = async (animalId: string) => {
     const extendCard = await axios.put(`dev/extend/${animalId}`, {
       headers: {
-        Authorization: token,
+        Authorization: userToken,
       },
     });
     //setCard => extend that card
@@ -147,7 +78,7 @@ const Profile = () => {
       { stage: "finish" },
       {
         headers: {
-          Authorization: token,
+          Authorization: userToken,
         },
       }
     );

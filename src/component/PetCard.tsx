@@ -1,11 +1,9 @@
 import Image from "next/image";
 import bountyicon from "../../public/bounty.png";
-import dog from "../../public/dog.png";
 import { MapPinIcon, ClockIcon } from "@heroicons/react/24/solid";
 import { MaleIcon } from "./MaleIcon";
 import { FemaleIcon } from "./FemaleIcon";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import { PetCarddI } from "@/constant/interface";
 

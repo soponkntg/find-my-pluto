@@ -1,7 +1,7 @@
 import axios from "@/axios.config";
 import { FormI } from "@/constant/interface";
 import { useUser } from "@/context/AuthContext";
-import { useUI } from "@/context/UIContext";
+import { useUI } from "@/context/DataContext";
 import { XCircleIcon } from "@heroicons/react/24/outline";
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import GoogleMapReact, { Coords } from "google-map-react";

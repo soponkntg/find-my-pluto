@@ -3,7 +3,6 @@ import { FemaleIcon } from "@/component/FemaleIcon";
 import { MaleIcon } from "@/component/MaleIcon";
 import Image from "next/image";
 import bountyicon from "../../public/bounty.png";
-import dog from "../../public/dog.png";
 import GoogleMapReact from "google-map-react";
 import moment from "moment";
 import { GetStaticPaths, GetStaticProps } from "next";
