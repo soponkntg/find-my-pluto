@@ -12,12 +12,12 @@ const Profile = () => {
   const router = useRouter();
   const [checked, setChecked] = useState(false);
   const [cards, setCards] = useState<PetCardPreviewI[]>([]);
+  const { userId, userToken } = useDataContext();
 
   const handleToggle = () => {
     setChecked((prev) => !prev);
     //swap cards set
   };
-  const { userId, userToken } = useDataContext();
 
   useEffect(() => {
     if (!(userId && userToken)) {

@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: false,
   env: {
     google: "AIzaSyCa0-Tlg3hWHLqeN67wYQZ5uZGYSLNioIc",
-    NODEENV: "development",
+    NODEENV: "production",
   },
   images: {
     remotePatterns: [
