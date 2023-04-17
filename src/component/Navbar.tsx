@@ -6,11 +6,12 @@ import Link from "next/link";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { Auth } from "aws-amplify";
-import { useUser } from "@/context/AuthContext";
+import { useDataContext } from "@/context/DataContext";
 
 export const Navbar = () => {
   const router = useRouter();
-  const userContext = useUser();
+  const { user, signin } = useDataContext();
+
   return (
     <nav className="bg-primary shadow-navbar flex-center">
       <div className="w-full max-width flex py-1 padding-x justify-between items-center">
@@ -31,7 +32,7 @@ export const Navbar = () => {
             </li>
           ))}
           <li className="navlink">
-            {userContext.user ? (
+            {user ? (
               <Link href={"/profile"}>
                 <UserIcon
                   className={`w-6 h-6 ${
@@ -40,10 +41,7 @@ export const Navbar = () => {
                 />
               </Link>
             ) : (
-              <UserIcon
-                className={`w-6 h-6 text-dimWhite/50`}
-                onClick={() => Auth.federatedSignIn()}
-              />
+              <UserIcon className={`w-6 h-6 text-dimWhite/50`} onClick={() => signin()} />
             )}
           </li>
         </ul>

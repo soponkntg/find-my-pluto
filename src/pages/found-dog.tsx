@@ -2,14 +2,14 @@ import axios from "@/axios.config";
 import { Button, PageLayout, PetCard } from "@/component";
 import { Filter } from "@/component/Filter";
 import { PetCardPreviewI } from "@/constant/interface";
-import { useUI } from "@/context/UIContext";
+import { useDataContext } from "@/context/DataContext";
 import moment from "moment";
 import { GetServerSideProps } from "next";
 import { useState } from "react";
 
 const FoundDog = ({ defaultCards }: { defaultCards: PetCardPreviewI[] }) => {
   const [cards, setCards] = useState<PetCardPreviewI[]>(defaultCards);
-  const { toggle, setToggle } = useUI();
+  const { openForm } = useDataContext();
 
   return (
     <>
@@ -20,7 +20,7 @@ const FoundDog = ({ defaultCards }: { defaultCards: PetCardPreviewI[] }) => {
               <h1 className="text-white text-center text-4xl font-bold">ตามหาเจ้าของ</h1>
               <Filter setCards={setCards} />
               <div className="hidden xs:block">
-                <Button onClick={() => setToggle(true)} />
+                <Button onClick={() => openForm()} />
               </div>
             </div>
           </div>
@@ -39,7 +39,7 @@ const FoundDog = ({ defaultCards }: { defaultCards: PetCardPreviewI[] }) => {
             ))}
 
             <div className="xs:hidden sticky bottom-[70px] z-10 ">
-              <Button onClick={() => setToggle(true)} />
+              <Button onClick={() => openForm()} />
             </div>
           </div>
         </div>

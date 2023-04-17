@@ -8,8 +8,7 @@ import type { AppProps } from "next/app";
 import { Prompt } from "next/font/google";
 import { Amplify } from "aws-amplify";
 import awsConfig from "../aws-exports";
-import AuthContext from "@/context/AuthContext";
-import UIContext from "@/context/UIContext";
+import DataContext from "@/context/DataContext";
 import Form from "@/component/Form";
 
 interface Props {
@@ -21,12 +20,6 @@ const prompt = Prompt({
   subsets: ["latin"],
   variable: "--font-prompt",
 });
-
-const ContextProvider = ({ children }: Props) => (
-  <UIContext>
-    <AuthContext>{children}</AuthContext>
-  </UIContext>
-);
 
 export default function App({ Component, pageProps }: AppProps) {
   const isLocalhost = process.env.NODEENV === "development";
@@ -49,16 +42,14 @@ export default function App({ Component, pageProps }: AppProps) {
   Amplify.configure(updatedAwsConfig);
 
   return (
-    <UIContext>
-      <AuthContext>
-        <main className={`${prompt.variable} font-sans`}>
-          <ToastContainer />
-          <Form />
-          <Navbar />
-          <Component {...pageProps} />
-          <NavigationBar />
-        </main>
-      </AuthContext>
-    </UIContext>
+    <DataContext>
+      <main className={`${prompt.variable} font-sans`}>
+        <ToastContainer />
+        <Form />
+        <Navbar />
+        <Component {...pageProps} />
+        <NavigationBar />
+      </main>
+    </DataContext>
   );
 }

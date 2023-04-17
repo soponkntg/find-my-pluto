@@ -1,5 +1,5 @@
 import { FilterI, OptionI, PetCardPreviewI } from "@/constant/interface";
-import { useUI } from "@/context/UIContext";
+import { useDataContext } from "@/context/DataContext";
 import { MapPinIcon } from "@heroicons/react/24/outline";
 import GoogleMapReact, { Coords } from "google-map-react";
 import { useRouter } from "next/router";
@@ -10,7 +10,7 @@ import { CustomSelect } from "./Form/CustomSelect";
 import axios from "@/axios.config";
 
 export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCardPreviewI[]>> }) => {
-  const { userLocation } = useUI();
+  const { userLocation } = useDataContext();
   const router = useRouter();
   const path = router.pathname;
   const { control, handleSubmit, setValue } = useForm();

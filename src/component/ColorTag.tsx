@@ -1,5 +1,4 @@
 import { colors } from "@/constant/text";
-import { useState } from "react";
 
 interface Props {
   color: string;

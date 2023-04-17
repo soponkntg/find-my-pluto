@@ -2,7 +2,7 @@ import axios from "@/axios.config";
 import { Button, PageLayout } from "@/component";
 import { PetCard } from "@/component";
 import { Filter } from "@/component/Filter";
-import { useUI } from "@/context/UIContext";
+import { useDataContext } from "@/context/DataContext";
 import { PetCardPreviewI } from "@/constant/interface";
 import moment from "moment";
 import { GetServerSideProps } from "next";
@@ -10,7 +10,7 @@ import { useState } from "react";
 
 export default function Home({ defaultCards }: { defaultCards: PetCardPreviewI[] }) {
   const [cards, setCards] = useState<PetCardPreviewI[]>(defaultCards);
-  const { toggle, setToggle } = useUI();
+  const { openForm } = useDataContext();
   return (
     <>
       <PageLayout>
@@ -20,7 +20,7 @@ export default function Home({ defaultCards }: { defaultCards: PetCardPreviewI[]
               <h1 className="text-white text-center text-4xl font-bold">ตามหาน้อง</h1>
               <Filter setCards={setCards} />
               <div className="hidden xs:block">
-                <Button onClick={() => setToggle(true)} />
+                <Button onClick={() => openForm()} />
               </div>
             </div>
           </div>
@@ -39,7 +39,7 @@ export default function Home({ defaultCards }: { defaultCards: PetCardPreviewI[]
             ))}
 
             <div className="xs:hidden sticky bottom-[70px] z-10 ">
-              <Button onClick={() => setToggle(true)} />
+              <Button onClick={() => openForm()} />
             </div>
           </div>
         </div>
