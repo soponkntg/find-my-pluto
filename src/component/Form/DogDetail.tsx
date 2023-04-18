@@ -42,8 +42,8 @@ const DogDetail = ({ setFormDate, nextSection, postType }: Props) => {
       )}
 
       {postType == "lost" && (
-        <Field label={"อายุ"}>
-          <Input name={"age"} register={register} type="number" placeholder="อายุ" />
+        <Field label={"อายุ*"} error={errors.age}>
+          <Input name={"age"} register={register} required type="number" placeholder="อายุ" />
         </Field>
       )}
 

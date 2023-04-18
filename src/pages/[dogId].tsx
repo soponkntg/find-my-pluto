@@ -36,8 +36,8 @@ const DogId = ({
 }: PetCardInfoI) => {
   const defaultProps = {
     center: {
-      lat: 13.72433,
-      lng: 100.50917,
+      lat: lastFoundPlace.lat,
+      lng: lastFoundPlace.lng,
     },
     zoom: 14,
   };
