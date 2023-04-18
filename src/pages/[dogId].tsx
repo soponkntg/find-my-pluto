@@ -34,6 +34,7 @@ const DogId = ({
   createdAt,
   expiredAt,
 }: PetCardInfoI) => {
+  console.log(images);
   const defaultProps = {
     center: {
       lat: 13.72433,
@@ -58,14 +59,9 @@ const DogId = ({
           <div className="w-[300px] h-[300px] xs:w-[474px] xs:h-[474px] rounded-t-xl overflow-hidden relative rounded-b-xl">
             <Carousel showThumbs={false} autoPlay>
               {images.map((url, index) => (
-                <Image
-                  src={url}
-                  alt={url}
-                  key={index}
-                  width={300}
-                  height={300}
-                  className="object-contain"
-                />
+                <div key={index} className="w-[300px] h-[300px] xs:w-[474px] xs:h-[474px]">
+                  <Image src={url} alt={url} fill className="object-cover" />
+                </div>
               ))}
             </Carousel>
             {/* <Image src={dog} alt="dog" fill className="object-cover" /> */}
