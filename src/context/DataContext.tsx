@@ -12,6 +12,8 @@ interface DataContextType {
   closeForm: () => void;
   userToken: string | null;
   userId: string | null;
+  loading: Boolean;
+  setLoading: Dispatch<SetStateAction<Boolean>>;
 }
 
 const Context = createContext<DataContextType>({} as DataContextType);
@@ -25,6 +27,7 @@ export default function DataContext({ children }: Props) {
   const [userToken, setUserToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [toggle, setToggle] = useState<Boolean>(false);
+  const [loading, setLoading] = useState<Boolean>(false);
   const [userLocation, setUserLocation] = useState<Coords>({ lat: 13.72433, lng: 100.50917 });
 
   useEffect(() => {
@@ -39,7 +42,6 @@ export default function DataContext({ children }: Props) {
           break;
         case "signIn_failure":
         case "cognitoHostedUI_failure":
-          console.log("Sign in failure", data);
           break;
       }
     });
@@ -94,6 +96,8 @@ export default function DataContext({ children }: Props) {
         openForm,
         userToken,
         userId,
+        loading,
+        setLoading,
       }}
     >
       {children}

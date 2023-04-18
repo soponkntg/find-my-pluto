@@ -12,7 +12,7 @@ const Profile = () => {
   const router = useRouter();
   const [checked, setChecked] = useState(false);
   const [cards, setCards] = useState<PetCardPreviewI[]>([]);
-  const { userId, userToken } = useDataContext();
+  const { userId, userToken, openForm } = useDataContext();
 
   const handleToggle = () => {
     setChecked((prev) => !prev);
@@ -131,7 +131,7 @@ const Profile = () => {
               </label>
             </div>
             <div className="hidden xs:block">
-              <Button />
+              <Button onClick={() => openForm()} />
             </div>
             <button
               className="rounded-[25px] w-full h-[45px] text-white text-xl bg-secondary"

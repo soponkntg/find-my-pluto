@@ -5,7 +5,7 @@ import { XCircleIcon } from "@heroicons/react/24/outline";
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import GoogleMapReact, { Coords } from "google-map-react";
 import router from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import DogDetail from "./DogDetail";
 import LostDetail from "./LostDetail";
@@ -32,6 +32,11 @@ const form: FormI = {
   },
   userName: "",
   contact: "",
+  braceletColor: undefined,
+  age: undefined,
+  animalName: undefined,
+  bounty: undefined,
+  description: undefined,
 };
 
 const Marker = (props: any) => (
@@ -41,7 +46,7 @@ const Marker = (props: any) => (
 );
 
 const Form = () => {
-  const { toggle, closeForm, userLocation, userId, userToken } = useDataContext();
+  const { toggle, closeForm, userLocation, userId, userToken, setLoading } = useDataContext();
 
   const [formData, setFormData] = useState<FormI>(form);
 
@@ -49,6 +54,14 @@ const Form = () => {
 
   const [mapVisible, setMapVisible] = useState<boolean>(false);
   const [markerPosition, setMarkerPosition] = useState<Coords>(userLocation);
+
+  useEffect(() => {
+    if (toggle) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto"; // cleanup or run on page unmount
+    }
+  }, [toggle]);
 
   // Navigate to next section
   const nextSection = () => {
@@ -61,10 +74,17 @@ const Form = () => {
     setMarkerPosition({ lat, lng });
   };
 
+  const closeModal = () => {
+    setFormData(form);
+    setPage(1);
+    closeForm();
+  };
+
   // submit form
   const submitForm = async (images: FileList) => {
     if (userToken && userId) {
       try {
+        setLoading(true);
         const imagesURL: string[] = [];
         const imagesList = Array.from(images);
         for (const img of imagesList) {
@@ -94,12 +114,19 @@ const Form = () => {
         });
         if (createCard.data.status == 200) {
           const cardId = createCard.data.message.animalId;
+          closeModal();
           toast.success("สร้างโพสสำเร็จ");
           router.push("/" + cardId);
         }
+        if (createCard.data.status == 500) {
+          toast.error(createCard.data.message as string);
+          closeModal();
+        }
       } catch (e: any) {
+        closeModal();
         toast.error(e.message as string);
       }
+      setLoading(false);
     }
   };
 
@@ -108,7 +135,7 @@ const Form = () => {
   }
 
   return (
-    <div className="absolute h-full w-full z-20 backdrop-blur-xl px-4">
+    <div className="fixed h-full w-full z-20 backdrop-blur-xl px-4">
       {/* Google Map */}
       {mapVisible && (
         <div className="z-30 h-full w-full absolute">
@@ -135,7 +162,7 @@ const Form = () => {
 
       <div className="bg-tertiary max-w-[800px] px-8 pt-12 pb-4 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 relative rounded-2xl">
         {/* cancel button */}
-        <button onClick={closeForm} className="top-[12px] right-[12px] absolute">
+        <button onClick={closeModal} className="top-[12px] right-[12px] absolute">
           <XCircleIcon className={`w-7 h-7`} />
         </button>
 

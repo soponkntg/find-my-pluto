@@ -4,7 +4,7 @@ import { MapPinIcon } from "@heroicons/react/24/outline";
 import GoogleMapReact, { Coords } from "google-map-react";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { area, dogSpecieOptions } from "@/constant/text";
 import { CustomSelect } from "./Form/CustomSelect";
 import axios from "@/axios.config";
@@ -13,7 +13,7 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
   const { userLocation } = useDataContext();
   const router = useRouter();
   const path = router.pathname;
-  const { control, handleSubmit, setValue } = useForm();
+  const { control } = useForm();
 
   const [subdistricts, setSubdistricts] = useState<OptionI[]>([{ value: "", label: "" }]);
   const [mapVisible, setMapVisible] = useState<boolean>(false);
@@ -230,7 +230,7 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
             className="rounded-[25px] w-full h-[45px] text-white text-lg bg-dark"
             onClick={() => setMapVisible(true)}
           >
-            ปักหมุด
+            ปักหมุดในรัสมี 10 กม.
           </button>
         </div>
       </div>

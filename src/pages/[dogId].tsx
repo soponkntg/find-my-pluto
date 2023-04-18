@@ -36,8 +36,8 @@ const DogId = ({
 }: PetCardInfoI) => {
   const defaultProps = {
     center: {
-      lat: 13.72433,
-      lng: 100.50917,
+      lat: lastFoundPlace.lat,
+      lng: lastFoundPlace.lng,
     },
     zoom: 14,
   };
@@ -58,14 +58,9 @@ const DogId = ({
           <div className="w-[300px] h-[300px] xs:w-[474px] xs:h-[474px] rounded-t-xl overflow-hidden relative rounded-b-xl">
             <Carousel showThumbs={false} autoPlay>
               {images.map((url, index) => (
-                <Image
-                  src={url}
-                  alt={url}
-                  key={index}
-                  width={300}
-                  height={300}
-                  className="object-contain"
-                />
+                <div key={index} className="w-[300px] h-[300px] xs:w-[474px] xs:h-[474px]">
+                  <Image src={url} alt={url} fill className="object-cover" />
+                </div>
               ))}
             </Carousel>
             {/* <Image src={dog} alt="dog" fill className="object-cover" /> */}
@@ -80,7 +75,7 @@ const DogId = ({
             )}
           </div>
           <div className="w-[300px] xs:w-[474px] flex justify-between items-center">
-            <Link href={`http://line.me/ti/p/~@${contact}`}>
+            <Link href={`http://line.me/ti/p/~${contact}`}>
               <button className="contact-button">ติดต่อคุณ{userName}</button>
             </Link>
             {/* <button className="contact-button">Facebook</button>
@@ -174,7 +169,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }));
   return {
     paths,
-    fallback: false,
+    fallback: "blocking",
   };
 };
 

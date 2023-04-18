@@ -20,9 +20,7 @@ export const Picture = ({ setFormDate, submitForm }: Props) => {
   } = useForm();
 
   const submit = async (data: any) => {
-    console.log("start");
     await submitForm(data.images);
-    console.log("end");
   };
 
   const onFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

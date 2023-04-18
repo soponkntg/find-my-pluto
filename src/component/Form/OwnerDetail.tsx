@@ -19,7 +19,12 @@ const OwnerDetail = ({ setFormDate, nextSection, postType }: Props) => {
   } = useForm();
 
   const submit = (data: any) => {
-    setFormDate((prev) => ({ ...prev, ...data }));
+    setFormDate((prev) => ({
+      ...prev,
+      ...data,
+      description: data.description == "" ? undefined : data.description,
+      bounty: data.bounty == "" ? undefined : data.bounty,
+    }));
     nextSection();
   };
   return (

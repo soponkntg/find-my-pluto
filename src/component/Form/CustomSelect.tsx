@@ -7,10 +7,11 @@ import Select, {
   GroupBase,
   SelectComponentsConfig,
 } from "react-select";
-import { area, colors } from "@/constant/text";
+import { area } from "@/constant/text";
 import { SelectComponents } from "react-select/dist/declarations/src/components";
 import { FilterI, OptionI } from "@/constant/interface";
 import { Dispatch, SetStateAction } from "react";
+import { colors } from "../ColorTag";
 
 interface Props {
   label: string;
