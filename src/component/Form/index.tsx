@@ -5,7 +5,7 @@ import { XCircleIcon } from "@heroicons/react/24/outline";
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import GoogleMapReact, { Coords } from "google-map-react";
 import router from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import DogDetail from "./DogDetail";
 import LostDetail from "./LostDetail";
@@ -49,6 +49,14 @@ const Form = () => {
 
   const [mapVisible, setMapVisible] = useState<boolean>(false);
   const [markerPosition, setMarkerPosition] = useState<Coords>(userLocation);
+
+  useEffect(() => {
+    if (toggle) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto"; // cleanup or run on page unmount
+    }
+  }, [toggle]);
 
   // Navigate to next section
   const nextSection = () => {
@@ -108,7 +116,7 @@ const Form = () => {
   }
 
   return (
-    <div className="absolute h-full w-full z-20 backdrop-blur-xl px-4">
+    <div className="fixed h-full w-full z-20 backdrop-blur-xl px-4">
       {/* Google Map */}
       {mapVisible && (
         <div className="z-30 h-full w-full absolute">

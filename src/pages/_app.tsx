@@ -23,7 +23,6 @@ const prompt = Prompt({
 
 export default function App({ Component, pageProps }: AppProps) {
   const isLocalhost = process.env.NODEENV === "development";
-  console.log(process.env.NODEENV);
 
   const [localRedirectSignIn, productionRedirectSignIn] = awsConfig.oauth.redirectSignIn.split(",");
 

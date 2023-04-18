@@ -39,7 +39,6 @@ export default function DataContext({ children }: Props) {
           break;
         case "signIn_failure":
         case "cognitoHostedUI_failure":
-          console.log("Sign in failure", data);
           break;
       }
     });

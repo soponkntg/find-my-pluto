@@ -80,7 +80,7 @@ const DogId = ({
             )}
           </div>
           <div className="w-[300px] xs:w-[474px] flex justify-between items-center">
-            <Link href={`http://line.me/ti/p/~@${contact}`}>
+            <Link href={`http://line.me/ti/p/~${contact}`}>
               <button className="contact-button">ติดต่อคุณ{userName}</button>
             </Link>
             {/* <button className="contact-button">Facebook</button>
@@ -174,7 +174,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }));
   return {
     paths,
-    fallback: false,
+    fallback: "blocking",
   };
 };
 

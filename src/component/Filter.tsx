@@ -4,7 +4,7 @@ import { MapPinIcon } from "@heroicons/react/24/outline";
 import GoogleMapReact, { Coords } from "google-map-react";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { area, dogSpecieOptions } from "@/constant/text";
 import { CustomSelect } from "./Form/CustomSelect";
 import axios from "@/axios.config";

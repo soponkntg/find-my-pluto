@@ -1,5 +1,5 @@
 import React from "react";
-import { FieldError, FieldErrorsImpl, FieldValue, Merge } from "react-hook-form";
+import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
 
 interface Props {
   label: string;
