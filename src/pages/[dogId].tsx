@@ -34,7 +34,6 @@ const DogId = ({
   createdAt,
   expiredAt,
 }: PetCardInfoI) => {
-  console.log(images);
   const defaultProps = {
     center: {
       lat: 13.72433,

@@ -2,7 +2,7 @@ import "@/styles/globals.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "react-toastify/dist/ReactToastify.css";
 
-import { Navbar, NavigationBar } from "@/component";
+import { Loading, Navbar, NavigationBar } from "@/component";
 import { ToastContainer } from "react-toastify";
 import type { AppProps } from "next/app";
 import { Prompt } from "next/font/google";
@@ -43,6 +43,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <DataContext>
       <main className={`${prompt.variable} font-sans`}>
+        <Loading />
         <ToastContainer />
         <Form />
         <Navbar />

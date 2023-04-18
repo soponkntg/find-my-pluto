@@ -27,6 +27,7 @@ module.exports = {
           800: "#CFCFCF",
         },
         "detail-card": "rgba(36, 39, 63, 0.8)",
+        blackdrop: "rgb(0,0,0,0.7)",
       },
       fontFamily: {
         sans: ["var(--font-prompt)", ...fontFamily.sans],

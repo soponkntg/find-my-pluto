@@ -112,7 +112,7 @@ export const PetCard = ({
             แก้ไข
           </button> */}
             <button
-              className="rounded-[25px] w-[117px] h-[45px] text-white text-lg bg-red-500"
+              className="rounded-[25px] w-full h-[45px] text-white text-lg bg-red-500"
               onClick={() => {
                 if (handleDelete) {
                   handleDelete(animalId);
