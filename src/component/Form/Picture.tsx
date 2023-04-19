@@ -30,6 +30,7 @@ export const Picture = ({ setFormDate, submitForm }: Props) => {
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
+        console.log(file.type);
         const fileUrl = URL.createObjectURL(file);
         urls.push(fileUrl);
       }
@@ -45,6 +46,7 @@ export const Picture = ({ setFormDate, submitForm }: Props) => {
           {...register("images", { required: "กรุณาอัพโหลดรูปภาพ" })}
           className="absolute w-full h-full opacity-0 cursor-pointer z-30"
           type="file"
+          accept="image/jpeg, image/png"
           multiple
           onChange={onFileInputChange}
         />
