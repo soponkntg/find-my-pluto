@@ -131,7 +131,7 @@ const LostDetail = ({
 
       <div className="w-full flex justify-end">
         <button className={`bg-primary p-2 rounded-2xl flex-center`} type="submit">
-          <Image width={45} height={45} src={buttonRight} alt={"buttonPlusSm"} />
+          <Image width={45} height={45} src={buttonRight} alt={"buttonPlusSm"} loading="lazy" />
         </button>
       </div>
     </form>

@@ -59,7 +59,7 @@ const DogId = ({
             <Carousel showThumbs={false} autoPlay>
               {images.map((url, index) => (
                 <div key={index} className="w-[300px] h-[300px] xs:w-[474px] xs:h-[474px]">
-                  <Image src={url} alt={url} fill className="object-cover" />
+                  <Image src={url} alt={url} fill className="object-cover" loading="lazy" />
                 </div>
               ))}
             </Carousel>

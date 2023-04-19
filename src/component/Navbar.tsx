@@ -17,7 +17,7 @@ export const Navbar = () => {
       <div className="w-full max-width flex py-1 padding-x justify-between items-center">
         <div className="relative w-[238px] h-[72px]">
           <Link href={"/"}>
-            <Image src={logo} alt="find-my-pluto" fill className="bg-contain" />
+            <Image src={logo} alt="find-my-pluto" fill className="bg-contain" loading="lazy" />
           </Link>
         </div>
         <ul className="xs:flex list-none space-x-4 hidden">

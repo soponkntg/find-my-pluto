@@ -45,7 +45,7 @@ export const PetCard = ({
         }}
       >
         {stage != "finding" && (
-          <div className="w-full h-full absolute z-50 bg-neutrals-800 opacity-50 flex-center">
+          <div className="w-full h-full absolute z-10 bg-neutrals-800 opacity-50 flex-center">
             {stage == "expired" && <h3 className=" text-grey/30 text-4xl">หมดอายุ</h3>}
             {stage == "finish" && <h3 className=" text-grey/30 text-4xl">น้องกลับบ้านแล้ว</h3>}
           </div>
@@ -53,7 +53,7 @@ export const PetCard = ({
         <Carousel showThumbs={false} autoPlay>
           {imageurl.map((url, index) => (
             <div key={index} className="`w-[300px] h-[400px]">
-              <Image src={url} alt={url} fill className="object-cover" />
+              <Image src={url} alt={url} fill className="object-cover" loading="lazy" />
             </div>
           ))}
         </Carousel>
@@ -62,7 +62,7 @@ export const PetCard = ({
         </div>
         {bounty && (
           <div className="absolute top-0 right-0 rounded-tr-xl rounded-bl-xl w-[120px] h-12 bg-secondary flex-center space-x-2">
-            <Image src={bountyicon} alt={"" + bounty} width={16} height={22} />
+            <Image src={bountyicon} alt={"" + bounty} width={16} height={22} loading="lazy" />
             <p className="text-white text-xl">฿{bounty}</p>
           </div>
         )}

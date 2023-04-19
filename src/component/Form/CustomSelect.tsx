@@ -28,7 +28,7 @@ interface Props {
 const DropdownIndicator = (props: DropdownIndicatorProps) => {
   return (
     <components.DropdownIndicator {...props}>
-      <Image src={buttonDown} alt={"buttonDown"} width={28} height={28} />
+      <Image src={buttonDown} alt={"buttonDown"} width={28} height={28} loading="lazy" />
     </components.DropdownIndicator>
   );
 };
