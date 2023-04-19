@@ -170,6 +170,15 @@ export const CustomSelect = ({
               if (selectedOption) {
                 if (isMulti) {
                   onChange(selectedOption.map((elem: OptionI) => elem.value));
+                  if (setFilters) {
+                    value = selectedOption.map((op: { value: any }) => op.value);
+                    setFilters((oldFilters) => {
+                      return {
+                        ...oldFilters,
+                        [name]: value.length > 0 ? value : null,
+                      };
+                    });
+                  }
                 } else {
                   onChange(selectedOption.value);
                   if (getSubdistrict) {
@@ -180,19 +189,10 @@ export const CustomSelect = ({
                     }
                   }
                   if (setFilters) {
-                    let value: any | null = null;
-                    if (selectedOption) {
-                      if (Array.isArray(selectedOption)) {
-                        value = selectedOption.map((op) => op.value);
-                      } else {
-                        value = selectedOption.value;
-                      }
-                    }
-
                     setFilters((oldFilters) => {
                       return {
                         ...oldFilters,
-                        [name]: value,
+                        [name]: selectedOption.value,
                       };
                     });
                   }
