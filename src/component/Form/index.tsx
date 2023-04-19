@@ -104,6 +104,8 @@ const Form = () => {
               },
             });
             imagesURL.push(uploadURL.split("?")[0]);
+          } else if (request.data.status == 500) {
+            throw new Error("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
           }
         }
         const form: FormI = { ...formData, images: imagesURL, userId: userId! };
@@ -117,8 +119,7 @@ const Form = () => {
           closeModal();
           toast.success("สร้างโพสสำเร็จ");
           router.push("/" + cardId);
-        }
-        if (createCard.data.status == 500) {
+        } else if (createCard.data.status == 500) {
           toast.error(createCard.data.message as string);
           closeModal();
         }
