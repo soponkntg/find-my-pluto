@@ -51,8 +51,6 @@ const DogId = ({
     return marker;
   };
 
-  console.log(images);
-
   return (
     <PageLayout>
       <div className="flex flex-col space-y-16 md:space-y-0 md:flex-row md:space-x-24 md:items-start">
