@@ -180,6 +180,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const dogInfo = res.data.message;
   return {
     props: { ...dogInfo },
+    increment: 60,
   };
 };
 
