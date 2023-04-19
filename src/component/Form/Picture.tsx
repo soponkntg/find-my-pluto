@@ -12,7 +12,7 @@ interface Props {
 
 export const Picture = ({ setFormDate, submitForm }: Props) => {
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
-  const [pictureFile, setPictureFile] = useState<FileList>();
+  const [pictureFile, setPictureFile] = useState<string>("");
   const {
     register,
     handleSubmit,
@@ -25,6 +25,7 @@ export const Picture = ({ setFormDate, submitForm }: Props) => {
 
   const onFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
+    let str = "";
     if (files) {
       const urls: string[] = [];
 
@@ -32,14 +33,17 @@ export const Picture = ({ setFormDate, submitForm }: Props) => {
         const file = files[i];
         const fileUrl = URL.createObjectURL(file);
         urls.push(fileUrl);
+        str = str + file.type;
       }
       setPreviewUrls(urls);
+      setPictureFile(str);
     }
   };
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit(submit)}>
       <h2 className="font-medium text-2xl">รูปภาพ</h2>
+      <h2 className="font-medium text-2xl">{pictureFile}</h2>
       <div className="relative w-[200px] h-[200px] rounded-xl bg-neutrals-300 overflow-hidden mx-auto">
         <input
           {...register("images", { required: "กรุณาอัพโหลดรูปภาพ" })}

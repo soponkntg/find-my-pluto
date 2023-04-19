@@ -88,7 +88,6 @@ const Form = () => {
         const imagesURL: string[] = [];
         const imagesList = Array.from(images);
         for (const img of imagesList) {
-          img.name.replace(/HEIC/g, "jpg");
           const request = await axios.get("/dev/s3url?imgType=" + img.type, {
             headers: {
               Authorization: userToken,
