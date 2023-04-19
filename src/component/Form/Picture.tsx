@@ -30,6 +30,7 @@ export const Picture = ({ setFormDate, submitForm }: Props) => {
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
+        console.log(file.type);
         const fileUrl = URL.createObjectURL(file);
         urls.push(fileUrl);
       }
@@ -45,11 +46,12 @@ export const Picture = ({ setFormDate, submitForm }: Props) => {
           {...register("images", { required: "กรุณาอัพโหลดรูปภาพ" })}
           className="absolute w-full h-full opacity-0 cursor-pointer z-30"
           type="file"
+          accept="image/jpeg, image/png"
           multiple
           onChange={onFileInputChange}
         />
         <button type="button" className="absolute top-0 left-0 w-full h-full flex-center">
-          <Image src={buttonPlus} alt={"button plus"} />
+          <Image src={buttonPlus} alt={"button plus"} loading="lazy" />
         </button>
       </div>
       {errors.images && (
@@ -59,14 +61,14 @@ export const Picture = ({ setFormDate, submitForm }: Props) => {
         <div className="flex-center space-x-2 flex-nowrap overflow-x-scroll">
           {previewUrls.map((url) => (
             <div key={url} className="w-[200px] h-[200px] flex-shrink-0 relative">
-              <Image src={url} alt="Preview Image" fill className="object-cover" />
+              <Image src={url} alt="Preview Image" fill className="object-cover" loading="lazy" />
             </div>
           ))}
         </div>
       )}
       <div className="w-full flex justify-end">
         <button className={`bg-primary p-2 rounded-2xl flex-center`} type="submit">
-          <Image width={45} height={45} src={buttonRight} alt={"buttonPlusSm"} />
+          <Image width={45} height={45} src={buttonRight} alt={"buttonPlusSm"} loading="lazy" />
         </button>
       </div>
     </form>

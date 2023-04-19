@@ -115,15 +115,15 @@ const LostDetail = ({
 
       <div>
         <input {...register("location", { required: "กรอกข้อมูลให้ครบถ้วน" })} type={"hidden"} />
-        <button
-          className="rounded-[25px] w-full h-[45px] text-white text-lg bg-dark"
+        <div
+          className="rounded-[25px] w-full h-[45px] text-white text-lg bg-dark text-center grid content-center"
           onClick={() => {
             setMapVisible(true);
             setValue("location", "valued");
           }}
         >
           ปักหมุด
-        </button>
+        </div>
         {errors.location && (
           <small className="text-sm text-red-500">{errors.location.message as string}</small>
         )}
@@ -131,7 +131,7 @@ const LostDetail = ({
 
       <div className="w-full flex justify-end">
         <button className={`bg-primary p-2 rounded-2xl flex-center`} type="submit">
-          <Image width={45} height={45} src={buttonRight} alt={"buttonPlusSm"} />
+          <Image width={45} height={45} src={buttonRight} alt={"buttonPlusSm"} loading="lazy" />
         </button>
       </div>
     </form>

@@ -104,6 +104,8 @@ const Form = () => {
               },
             });
             imagesURL.push(uploadURL.split("?")[0]);
+          } else if (request.data.status == 500) {
+            throw new Error("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
           }
         }
         const form: FormI = { ...formData, images: imagesURL, userId: userId! };
@@ -117,8 +119,7 @@ const Form = () => {
           closeModal();
           toast.success("สร้างโพสสำเร็จ");
           router.push("/" + cardId);
-        }
-        if (createCard.data.status == 500) {
+        } else if (createCard.data.status == 500) {
           toast.error(createCard.data.message as string);
           closeModal();
         }
@@ -147,14 +148,14 @@ const Form = () => {
           >
             <Marker lat={markerPosition.lat} lng={markerPosition.lng} />
           </GoogleMapReact>
-          <button
-            className="absolute bottom-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-[25px] w-[300px] h-[45px] text-white text-lg bg-dark"
+          <div
+            className="absolute bottom-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-[25px] w-[300px] h-[45px] text-white text-lg bg-dark text-center grid content-center"
             onClick={() => {
               setMapVisible(false);
             }}
           >
             ยืนยัน
-          </button>
+          </div>
         </div>
       )}
 

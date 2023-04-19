@@ -145,7 +145,7 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
   return (
     <div className="w-[340px] h-[630px] bg-tertiary rounded-lg">
       {mapVisible && (
-        <div className="z-30 h-5/6 w-5/6 absolute" ref={mapRef}>
+        <div className="z-30 h-[600px] w-5/6 absolute" ref={mapRef}>
           <GoogleMapReact
             bootstrapURLKeys={{ key: process.env.google || "" }}
             defaultCenter={center}
@@ -154,7 +154,7 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
           >
             <Marker lat={markerPosition.lat} lng={markerPosition.lng} />
           </GoogleMapReact>
-          <div className="absolute space-x-3 bottom-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
+          <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 grid gap-2 md:grid-cols-2">
             <button
               className="rounded-[25px] w-[200px] h-[45px] text-white text-lg bg-dark"
               onClick={() => {
