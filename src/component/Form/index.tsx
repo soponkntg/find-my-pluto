@@ -147,14 +147,14 @@ const Form = () => {
           >
             <Marker lat={markerPosition.lat} lng={markerPosition.lng} />
           </GoogleMapReact>
-          <button
-            className="absolute bottom-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-[25px] w-[300px] h-[45px] text-white text-lg bg-dark"
+          <div
+            className="absolute bottom-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-[25px] w-[300px] h-[45px] text-white text-lg bg-dark text-center grid content-center"
             onClick={() => {
               setMapVisible(false);
             }}
           >
             ยืนยัน
-          </button>
+          </div>
         </div>
       )}
 
