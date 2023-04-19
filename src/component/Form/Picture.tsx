@@ -30,7 +30,6 @@ export const Picture = ({ setFormDate, submitForm }: Props) => {
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        console.log(file.type);
         const fileUrl = URL.createObjectURL(file);
         urls.push(fileUrl);
       }
