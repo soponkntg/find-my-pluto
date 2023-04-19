@@ -12,6 +12,7 @@ interface Props {
 
 export const Picture = ({ setFormDate, submitForm }: Props) => {
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const [imgeFiles, setImgFiles] = useState<FileList>([] as unknown as FileList);
   const {
     register,
     handleSubmit,
@@ -19,7 +20,7 @@ export const Picture = ({ setFormDate, submitForm }: Props) => {
   } = useForm();
 
   const submit = async (data: any) => {
-    await submitForm(data.images);
+    await submitForm(imgeFiles);
   };
 
   const onFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,6 +34,7 @@ export const Picture = ({ setFormDate, submitForm }: Props) => {
         urls.push(fileUrl);
       }
       setPreviewUrls(urls);
+      setImgFiles(files);
     }
   };
 
