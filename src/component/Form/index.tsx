@@ -117,8 +117,8 @@ const Form = () => {
         if (createCard.data.status == 200) {
           const cardId = createCard.data.message.animalId;
           closeModal();
-          toast.success("สร้างโพสสำเร็จ");
           router.push("/" + cardId);
+          toast.success("สร้างโพสสำเร็จ");
         } else if (createCard.data.status == 500) {
           toast.error(createCard.data.message as string);
           closeModal();
@@ -136,7 +136,7 @@ const Form = () => {
   }
 
   return (
-    <div className="fixed h-full w-full z-20 backdrop-blur-xl px-4">
+    <div className="fixed h-full w-full z-20 backdrop-blur-xl">
       {/* Google Map */}
       {mapVisible && (
         <div className="z-30 h-full w-full absolute">

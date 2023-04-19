@@ -49,7 +49,7 @@ export const Picture = ({ setFormDate, submitForm }: Props) => {
           {...register("images", { required: "กรุณาอัพโหลดรูปภาพ" })}
           className="absolute w-full h-full opacity-0 cursor-pointer z-30"
           type="file"
-          accept="image/jpeg, image/png"
+          accept="image/*"
           multiple
           onChange={onFileInputChange}
         />
