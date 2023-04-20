@@ -58,10 +58,10 @@ const DogDetail = ({ setFormDate, nextSection, postType }: Props) => {
         />
       </Field>
 
-      <Field label="สายพันธ์*" error={errors.species}>
+      <Field label="สายพันธ์ุ*" error={errors.species}>
         <CustomSelect
           control={control}
-          label={"สายพันธ์"}
+          label={"สายพันธ์ุ"}
           isMulti={false}
           name={"species"}
           require={"กรอกข้อมูลให้ครบถ้วน"}
