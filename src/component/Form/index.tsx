@@ -87,6 +87,9 @@ const Form = () => {
         setLoading(true);
         const imagesURL: string[] = [];
         const imagesList = Array.from(images);
+        if (imagesList.length == 0) {
+          throw new Error("อัพโหลดรูปผิดพลาด กรุณาลองใหม่อีกครั้ง");
+        }
         for (const img of imagesList) {
           const request = await axios.get("/dev/s3url?imgType=" + img.type, {
             headers: {
