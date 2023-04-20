@@ -230,7 +230,7 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
             className="rounded-[25px] w-full h-[45px] text-white text-lg bg-dark"
             onClick={() => setMapVisible(true)}
           >
-            ปักหมุดในรัสมี 10 กม.
+            ปักหมุดในรัศมี 10 กม.
           </button>
         </div>
       </div>
