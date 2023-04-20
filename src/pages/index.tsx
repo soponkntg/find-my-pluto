@@ -7,12 +7,19 @@ import { PetCardPreviewI } from "@/constant/interface";
 import moment from "moment";
 import { GetServerSideProps } from "next";
 import { useState } from "react";
+import { Meta } from "@/component/Meta";
 
 export default function Home({ defaultCards }: { defaultCards: PetCardPreviewI[] }) {
   const [cards, setCards] = useState<PetCardPreviewI[]>(defaultCards);
   const { openForm } = useDataContext();
   return (
     <>
+      <Meta
+        title={"Findmypluto"}
+        description={
+          "เว็บไซต์เพื่อช่วยในการตามหาสัตว์เลี้ยงหลงทางหรือเจ้าของน้อง เราได้พบว่าวิธีการตามหาสัตว์เลี้ยงในปัจจุบันนั้นมีความซับซ้อน จึงทำให้เราตัดสินใจสร้างเว็บไซต์นี้ขึ้นมา เพื่อช่วยให้การค้นหาและพบสัตว์เลี้ยงที่หายตัวไปนั้นง่ายและรวดเร็วขึ้น"
+        }
+      />
       <PageLayout>
         <div className="flex flex-col sm:flex-row space-y-8 sm:space-y-0 sm:space-x-8 z-0">
           <div>

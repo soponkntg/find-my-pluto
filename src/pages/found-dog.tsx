@@ -6,6 +6,7 @@ import { useDataContext } from "@/context/DataContext";
 import moment from "moment";
 import { GetServerSideProps } from "next";
 import { useState } from "react";
+import { NextSeo } from "next-seo";
 
 const FoundDog = ({ defaultCards }: { defaultCards: PetCardPreviewI[] }) => {
   const [cards, setCards] = useState<PetCardPreviewI[]>(defaultCards);
