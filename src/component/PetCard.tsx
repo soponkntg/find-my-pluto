@@ -53,7 +53,14 @@ export const PetCard = ({
         <Carousel showThumbs={false} autoPlay>
           {imageurl.map((url, index) => (
             <div key={index} className="`w-[300px] h-[400px]">
-              <Image src={url} alt={url} fill className="object-cover" loading="lazy" />
+              <Image
+                src={url}
+                alt={url}
+                fill
+                className="object-cover"
+                loading="lazy"
+                quality={"50"}
+              />
             </div>
           ))}
         </Carousel>
