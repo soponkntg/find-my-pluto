@@ -47,7 +47,7 @@ const OwnerDetail = ({ setFormDate, nextSection, postType }: Props) => {
       <textarea
         {...register("description")}
         rows={4}
-        placeholder="เพิ่มเติ่ม"
+        placeholder="เพิ่มเติม"
         className={`"text-neutrals-800" p-2 text-lg bg-neutral-200 placeholder-neutrals-800 rounded-lg px-2 text-black leading-tight focus:outline-none focus:ring-[#2684FF] focus:ring-2 w-full`}
       />
 
