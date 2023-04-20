@@ -77,7 +77,7 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
       ],
     },
     {
-      label: "สายพันธ์:",
+      label: "สายพันธ์ุ:",
       isMulti: false,
       name: "speciesFilter",
       options: dogSpecieOptions,
