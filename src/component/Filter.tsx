@@ -15,7 +15,7 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
   const path = router.pathname;
   const { control } = useForm();
 
-  const [subdistricts, setSubdistricts] = useState<OptionI[]>([{ value: "", label: "" }]);
+  // const [subdistricts, setSubdistricts] = useState<OptionI[]>([{ value: "", label: "" }]);
   const [mapVisible, setMapVisible] = useState<boolean>(false);
   const center = userLocation;
   const zoom = 12;
@@ -38,15 +38,15 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
     districts.push({ value: district, label: district });
   }
 
-  const getSubdistrict = (district: keyof typeof area | null) => {
-    if (district) {
-      const subdistrict = area[district];
-      const temp = subdistrict.map((elem: string) => ({ value: elem, label: elem }));
-      setSubdistricts(temp);
-    } else {
-      setSubdistricts([]);
-    }
-  };
+  // const getSubdistrict = (district: keyof typeof area | null) => {
+  //   if (district) {
+  //     const subdistrict = area[district];
+  //     const temp = subdistrict.map((elem: string) => ({ value: elem, label: elem }));
+  //     setSubdistricts(temp);
+  //   } else {
+  //     setSubdistricts([]);
+  //   }
+  // };
 
   const onMapClick = (event: any) => {
     const { lat, lng } = event;
@@ -128,7 +128,7 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
   }, [filters]);
 
   return (
-    <div className="w-[340px] h-[630px] bg-tertiary rounded-lg">
+    <div className="w-[340px] bg-tertiary rounded-lg">
       {mapVisible && (
         <div className="z-30 h-[600px] w-5/6 absolute" ref={mapRef}>
           <GoogleMapReact
