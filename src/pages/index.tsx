@@ -1,4 +1,4 @@
-import axios from "@/axios.config";
+import PlutoAxios from "@/axios.config";
 import { Button, PageLayout } from "@/component";
 import { PetCard } from "@/component";
 import { Filter } from "@/component/Filter";
@@ -56,7 +56,7 @@ export default function Home({ defaultCards }: { defaultCards: PetCardPreviewI[]
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const res = await axios.post(`/dev/cards`, {
+  const res = await PlutoAxios.post(`/dev/cards`, {
     postType: "lost",
   });
   const defaultCards = res.data.message;

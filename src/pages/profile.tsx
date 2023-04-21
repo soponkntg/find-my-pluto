@@ -1,10 +1,9 @@
 import { Button, PageLayout } from "@/component";
 import { PetCard } from "@/component";
-import { Auth } from "aws-amplify";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useDataContext } from "@/context/DataContext";
-import axios from "../axios.config";
+import PlutoAxios from "../axios.config";
 import moment from "moment";
 import { PetCardPreviewI } from "@/constant/interface";
 
@@ -12,7 +11,7 @@ const Profile = () => {
   const router = useRouter();
   const [checked, setChecked] = useState(false);
   const [cards, setCards] = useState<PetCardPreviewI[]>([]);
-  const { userId, userToken, openForm } = useDataContext();
+  const { userId, userToken, openForm, signout } = useDataContext();
 
   const handleToggle = () => {
     setChecked((prev) => !prev);
@@ -25,7 +24,7 @@ const Profile = () => {
     } else {
       //fetch user card
       const fetchCard = async () => {
-        const getCard = await axios.post("dev/cards", {
+        const getCard = await PlutoAxios.post("dev/cards", {
           userId,
         });
 
@@ -39,7 +38,7 @@ const Profile = () => {
   }, [userId, userToken, router]);
 
   const handleDelete = async (animalId: string) => {
-    const deleteCard = await axios.delete(`dev/card/${animalId}`, {
+    const deleteCard = await PlutoAxios.delete(`dev/card/${animalId}`, {
       headers: {
         Authorization: userToken,
       },
@@ -52,7 +51,7 @@ const Profile = () => {
     }
   };
   const handleExtend = async (animalId: string) => {
-    const extendCard = await axios.put(`dev/extend/${animalId}`, {
+    const extendCard = await PlutoAxios.put(`dev/extend/${animalId}`, {
       headers: {
         Authorization: userToken,
       },
@@ -73,7 +72,7 @@ const Profile = () => {
   };
   const handleFinish = async (animalId: string) => {
     // console.log("finish:", animalId);
-    const finishCard = await axios.put(
+    const finishCard = await PlutoAxios.put(
       `dev/card/${animalId}`,
       { stage: "finish" },
       {
@@ -135,7 +134,7 @@ const Profile = () => {
             </div>
             <button
               className="rounded-[25px] w-full h-[45px] text-white text-xl bg-secondary"
-              onClick={() => Auth.signOut()}
+              onClick={signout}
             >
               ออกจากระบบ
             </button>

@@ -100,21 +100,6 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
       label: `วันที่${path == "/" ? "หาย:" : "พบ:"}`,
       name: "lastSeenDateFilter",
     },
-
-    {
-      label: "เขต:",
-      isMulti: false,
-      name: "districtFilter",
-      getSubdistrict: getSubdistrict,
-      options: districts,
-    },
-
-    {
-      label: "แขวง:",
-      isMulti: false,
-      name: "subdistrictFilter",
-      options: subdistricts,
-    },
   ];
 
   useEffect(() => {
@@ -203,7 +188,6 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
                     name={f.name}
                     options={f.options ? f.options : []}
                     setFilters={setFilters}
-                    getSubdistrict={f.getSubdistrict}
                   />
                 ) : (
                   <input

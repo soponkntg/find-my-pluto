@@ -6,7 +6,7 @@ import bountyicon from "../../public/bounty.png";
 import GoogleMapReact from "google-map-react";
 import moment from "moment";
 import { GetStaticPaths, GetStaticProps } from "next";
-import axios from "../axios.config";
+import PlutoAxios from "../axios.config";
 import { PetCardInfoI } from "@/constant/interface";
 import Link from "next/link";
 import { Carousel } from "react-responsive-carousel";
@@ -41,6 +41,7 @@ const DogId = ({
     },
     zoom: 14,
   };
+  console.log(lastFoundPlace);
 
   const renderMarkers = (map: any, maps: any) => {
     let marker = new maps.Marker({
@@ -130,7 +131,11 @@ const DogId = ({
             </p>
             <p className="grow-[3]">
               <span className="font-semibold">สถานที่{postType == "lost" ? "หาย" : "เจอ"} :</span>{" "}
-              {lastFoundPlace.subdistrict + ", " + lastFoundPlace.district}
+              {lastFoundPlace.subdistrict +
+                ", " +
+                lastFoundPlace.district +
+                ", " +
+                lastFoundPlace.province}
             </p>
           </div>
           {description && (
@@ -160,7 +165,7 @@ const DogId = ({
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const res = await axios.post(`/dev/cards`);
+  const res = await PlutoAxios.post(`/dev/cards`);
   const cards = res.data.message;
   const paths = cards.map((card: { animalId: string }) => ({
     params: {
@@ -176,7 +181,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async (context) => {
   const params = context.params;
   const dogId = params?.dogId;
-  const res = await axios.get(`/dev/card/${dogId}`);
+  const res = await PlutoAxios.get(`/dev/card/${dogId}`);
   const dogInfo = res.data.message;
   return {
     props: { ...dogInfo },

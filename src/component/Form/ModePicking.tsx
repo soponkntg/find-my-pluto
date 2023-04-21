@@ -23,7 +23,7 @@ const ModePicking = ({ setFormDate, nextSection }: Props) => {
           handlePostType("lost");
         }}
       >
-        <Image src={buttonLost} alt={"buttonLost"} fill loading="lazy" />
+        <Image src={buttonLost} alt={"buttonLost"} fill loading="lazy" sizes="" />
       </button>
       <button
         className="w-[300px] h-[95px] relative"

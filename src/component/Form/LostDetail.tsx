@@ -1,19 +1,20 @@
-import { FormI, OptionI } from "@/constant/interface";
-import { area } from "@/constant/text";
-import { useState } from "react";
+import { FormI } from "@/constant/interface";
 import { Controller, useForm } from "react-hook-form";
-import { CustomSelect } from "./CustomSelect";
 import Field from "./Field";
 import Image from "next/image";
 import buttonRight from "../../../public/button-right.png";
-import { Coords } from "google-map-react";
+import Input from "./Input";
 
 interface Props {
   setFormDate: React.Dispatch<React.SetStateAction<FormI>>;
   nextSection: () => void;
   postType: string;
   setMapVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  markerPosition: Coords;
+  locationDetail?: {
+    province: string;
+    district: string;
+    subdistrict: string;
+  };
 }
 
 const LostDetail = ({
@@ -21,10 +22,8 @@ const LostDetail = ({
   nextSection,
   postType,
   setMapVisible,
-  markerPosition,
+  locationDetail,
 }: Props) => {
-  const [subdistrictOptions, setSubdistrictOptions] = useState<OptionI[]>([]);
-
   const {
     register,
     setValue,
@@ -37,33 +36,8 @@ const LostDetail = ({
     setFormDate((prev) => ({
       ...prev,
       lastSeenAt: data.lastSeenDate.toISOString(),
-      lastFoundPlace: {
-        ...prev.lastFoundPlace,
-        district: data.district,
-        subdistrict: data.subdistrict,
-        lat: markerPosition.lat,
-        lng: markerPosition.lng,
-      },
     }));
     nextSection();
-  };
-
-  const generateDistrictOptions = () => {
-    const districtOptions = [];
-    for (let district in area) {
-      districtOptions.push({ value: district, label: district });
-    }
-    return districtOptions;
-  };
-
-  const generateSubdistrictOptions = (district: keyof typeof area | null) => {
-    if (district) {
-      const subdistrict = area[district];
-      const subdistrictOptions = subdistrict.map((elem: string) => ({ value: elem, label: elem }));
-      setSubdistrictOptions(subdistrictOptions);
-    } else {
-      setSubdistrictOptions([]);
-    }
   };
 
   return (
@@ -90,29 +64,6 @@ const LostDetail = ({
         />
       </Field>
 
-      <h2 className="font-medium text-2xl">สถานที่{postType == "lost" ? "น้องหาย" : "พบน้อง"}</h2>
-      <Field label={"เขต*"} error={errors.district}>
-        <CustomSelect
-          control={control}
-          label={"เขต"}
-          getSubdistrict={generateSubdistrictOptions}
-          isMulti={false}
-          name={"district"}
-          require={"กรอกข้อมูลให้ครบถ้วน"}
-          options={generateDistrictOptions()}
-        />
-      </Field>
-      <Field label={"แขวง*"} error={errors.subdistrict}>
-        <CustomSelect
-          label={"แขวง"}
-          isMulti={false}
-          control={control}
-          name={"subdistrict"}
-          require={"กรอกข้อมูลให้ครบถ้วน"}
-          options={subdistrictOptions}
-        />
-      </Field>
-
       <div>
         <input {...register("location", { required: "กรอกข้อมูลให้ครบถ้วน" })} type={"hidden"} />
         <div
@@ -122,12 +73,28 @@ const LostDetail = ({
             setValue("location", "valued");
           }}
         >
-          ปักหมุด
+          ปักหมุดสถานที่หาย
         </div>
         {errors.location && (
           <small className="text-sm text-red-500">{errors.location.message as string}</small>
         )}
       </div>
+
+      {locationDetail && (
+        <Field label={"แขวง"}>
+          <Input register={register} name="subdistrict" value={locationDetail.subdistrict} />
+        </Field>
+      )}
+      {locationDetail && (
+        <Field label={"เขต"}>
+          <Input register={register} name="district" value={locationDetail.district} />
+        </Field>
+      )}
+      {locationDetail && (
+        <Field label={"จังหวัด"}>
+          <Input register={register} name="province" value={locationDetail.province} />
+        </Field>
+      )}
 
       <div className="w-full flex justify-end">
         <button className={`bg-primary p-2 rounded-2xl flex-center`} type="submit">

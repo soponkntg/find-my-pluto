@@ -1,4 +1,4 @@
-import axios from "@/axios.config";
+import PlutoAxios from "@/axios.config";
 import { Button, PageLayout, PetCard } from "@/component";
 import { Filter } from "@/component/Filter";
 import { PetCardPreviewI } from "@/constant/interface";
@@ -11,6 +11,8 @@ import { NextSeo } from "next-seo";
 const FoundDog = ({ defaultCards }: { defaultCards: PetCardPreviewI[] }) => {
   const [cards, setCards] = useState<PetCardPreviewI[]>(defaultCards);
   const { openForm } = useDataContext();
+
+  console.log(defaultCards);
 
   return (
     <>
@@ -33,7 +35,7 @@ const FoundDog = ({ defaultCards }: { defaultCards: PetCardPreviewI[] }) => {
                 animalId={card.animalId}
                 imageurl={card.images}
                 gender={card.gender}
-                location={card.lastFoundPlace.subdistrict + ", " + card.lastFoundPlace.district}
+                location={card.lastFoundPlace.district + ", " + card.lastFoundPlace.province}
                 timestamp={moment(new Date(card.lastSeenAt)).format("MM/DD/YYYY h:mm")}
                 bounty={card.bounty}
               />
@@ -50,7 +52,7 @@ const FoundDog = ({ defaultCards }: { defaultCards: PetCardPreviewI[] }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const res = await axios.post(`/dev/cards`, {
+  const res = await PlutoAxios.post(`/dev/cards`, {
     postType: "found",
   });
   const defaultCards = res.data.message;
