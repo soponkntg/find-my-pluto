@@ -1,8 +1,9 @@
-import axios from "@/axios.config";
+import PlutoAxios from "@/axios.config";
 import { FormI } from "@/constant/interface";
 import { useDataContext } from "@/context/DataContext";
 import { XCircleIcon } from "@heroicons/react/24/outline";
 import { MapPinIcon } from "@heroicons/react/24/solid";
+import axios from "axios";
 import GoogleMapReact, { Coords } from "google-map-react";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
@@ -12,6 +13,12 @@ import LostDetail from "./LostDetail";
 import ModePicking from "./ModePicking";
 import OwnerDetail from "./OwnerDetail";
 import { Picture } from "./Picture";
+
+interface LocationDetail {
+  province: string;
+  district: string;
+  subdistrict: string;
+}
 
 const form: FormI = {
   userId: "",
@@ -54,6 +61,7 @@ const Form = () => {
 
   const [mapVisible, setMapVisible] = useState<boolean>(false);
   const [markerPosition, setMarkerPosition] = useState<Coords>(userLocation);
+  const [locationDetail, setLocationDetail] = useState<LocationDetail | undefined>(undefined);
 
   useEffect(() => {
     if (toggle) {
@@ -74,9 +82,41 @@ const Form = () => {
     setMarkerPosition({ lat, lng });
   };
 
+  const onMapSubmit = async (lat: number, lng: number) => {
+    const res = await axios.get(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&result_type=political&key=${process.env.google}&language=th`
+    );
+    let subdistrict = "";
+    let district = "";
+    let province = "";
+    if (res.data.results[0].address_components.length == 5) {
+      subdistrict = res.data.results[0].address_components[0].short_name;
+      district = res.data.results[0].address_components[1].short_name;
+      province = res.data.results[0].address_components[2].short_name;
+    } else {
+      subdistrict = res.data.results[0].address_components[1].short_name;
+      district = res.data.results[0].address_components[2].short_name;
+      province = res.data.results[0].address_components[3].short_name;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      lastFoundPlace: {
+        province,
+        district,
+        subdistrict,
+        lat,
+        lng,
+      },
+    }));
+    setLocationDetail({ province, district, subdistrict });
+    setMapVisible(false);
+  };
+
   const closeModal = () => {
     setFormData(form);
     setPage(1);
+    setLocationDetail(undefined);
     closeForm();
   };
 
@@ -91,7 +131,7 @@ const Form = () => {
           throw new Error("อัพโหลดรูปผิดพลาด กรุณาลองใหม่อีกครั้ง");
         }
         for (const img of imagesList) {
-          const request = await axios.get("/dev/s3url?imgType=" + img.type, {
+          const request = await PlutoAxios.get("/dev/s3url?imgType=" + img.type, {
             headers: {
               Authorization: userToken,
             },
@@ -112,7 +152,7 @@ const Form = () => {
           }
         }
         const form: FormI = { ...formData, images: imagesURL, userId: userId! };
-        const createCard = await axios.post("/dev/card", form, {
+        const createCard = await PlutoAxios.post("/dev/card", form, {
           headers: {
             Authorization: userToken,
           },
@@ -121,7 +161,6 @@ const Form = () => {
           const cardId = createCard.data.message.animalId;
           closeModal();
           router.push("/" + cardId);
-          toast.success("สร้างโพสสำเร็จ");
         } else if (createCard.data.status == 500) {
           toast.error(createCard.data.message as string);
           closeModal();
@@ -153,8 +192,8 @@ const Form = () => {
           </GoogleMapReact>
           <div
             className="absolute bottom-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-[25px] w-[300px] h-[45px] text-white text-lg bg-dark text-center grid content-center"
-            onClick={() => {
-              setMapVisible(false);
+            onClick={async () => {
+              await onMapSubmit(markerPosition.lat, markerPosition.lng);
             }}
           >
             ยืนยัน
@@ -184,7 +223,7 @@ const Form = () => {
             nextSection={nextSection}
             postType={formData.postType}
             setMapVisible={setMapVisible}
-            markerPosition={markerPosition}
+            locationDetail={locationDetail}
           />
         )}
         {page == 4 && (

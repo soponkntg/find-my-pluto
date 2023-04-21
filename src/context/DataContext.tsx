@@ -8,6 +8,7 @@ interface DataContextType {
   toggle: Boolean;
   user: CognitoUser | null;
   signin: () => void;
+  signout: () => void;
   openForm: () => void;
   closeForm: () => void;
   userToken: string | null;
@@ -72,6 +73,9 @@ export default function DataContext({ children }: Props) {
   const signin = () => {
     Auth.federatedSignIn();
   };
+  const signout = () => {
+    Auth.signOut();
+  };
 
   const openForm = () => {
     if (user) {
@@ -98,6 +102,7 @@ export default function DataContext({ children }: Props) {
         userId,
         loading,
         setLoading,
+        signout,
       }}
     >
       {children}

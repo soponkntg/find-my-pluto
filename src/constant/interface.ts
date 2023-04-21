@@ -52,6 +52,7 @@ export interface PetCardPreviewI {
   lastFoundPlace: {
     district: string;
     subdistrict: string;
+    province: string;
   };
   lastSeenAt: number;
   animalId: string;
