@@ -128,7 +128,7 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
   }, [filters]);
 
   return (
-    <div className="w-[340px] h-[630px] bg-tertiary rounded-lg">
+    <div className="w-[340px] bg-tertiary rounded-lg">
       {mapVisible && (
         <div className="z-30 h-[600px] w-5/6 absolute" ref={mapRef}>
           <GoogleMapReact
