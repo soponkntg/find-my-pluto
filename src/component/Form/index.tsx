@@ -23,7 +23,7 @@ interface LocationDetail {
 const form: FormI = {
   userId: "",
   postType: "",
-  animal: "หมา",
+  animal: "",
   images: [],
   species: "",
   colors: "",
@@ -31,7 +31,7 @@ const form: FormI = {
   size: "",
   lastSeenAt: "",
   lastFoundPlace: {
-    province: "กรุงเทพ",
+    province: "",
     district: "",
     subdistrict: "",
     lat: 0,

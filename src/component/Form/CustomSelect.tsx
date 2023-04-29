@@ -15,7 +15,7 @@ import { colors } from "../ColorTag";
 
 interface Props {
   label: string;
-  getSubdistrict?: (district: keyof typeof area | null) => void;
+  getOptions?: (selected: string | null) => void;
   isMulti?: boolean;
   control: Control;
   options: { value: string; label: string }[];
@@ -129,7 +129,7 @@ export const CustomSelect = ({
   name,
   control,
   require,
-  getSubdistrict,
+  getOptions,
   isMulti,
   options,
   label,
@@ -154,8 +154,8 @@ export const CustomSelect = ({
               //clear case
               if (action == "clear") {
                 onChange();
-                if (getSubdistrict) {
-                  getSubdistrict(null);
+                if (getOptions) {
+                  getOptions(null);
                 }
                 if (setFilters) {
                   setFilters((oldFilters) => {
@@ -181,11 +181,11 @@ export const CustomSelect = ({
                   }
                 } else {
                   onChange(selectedOption.value);
-                  if (getSubdistrict) {
+                  if (getOptions) {
                     if (selectedOption) {
-                      getSubdistrict(selectedOption.value);
+                      getOptions(selectedOption.value);
                     } else {
-                      getSubdistrict(null);
+                      getOptions(null);
                     }
                   }
                   if (setFilters) {

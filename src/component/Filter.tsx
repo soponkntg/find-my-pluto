@@ -5,7 +5,13 @@ import GoogleMapReact, { Coords } from "google-map-react";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { area, dogSpecieOptions } from "@/constant/text";
+import {
+  animalOptions,
+  area,
+  catSpecieOptions,
+  dogSpecieOptions,
+  genderOptions,
+} from "@/constant/text";
 import { CustomSelect } from "./Form/CustomSelect";
 import axios from "@/axios.config";
 
@@ -14,6 +20,21 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
   const router = useRouter();
   const path = router.pathname;
   const { control } = useForm();
+
+  const [speciesOptions, setSpeciesOptions] = useState<OptionI[]>([]);
+
+  const generateSpeciesOptions = (animal: string | null) => {
+    if (animal) {
+      if (animal == "หมา") {
+        setSpeciesOptions(dogSpecieOptions);
+      }
+      if (animal == "แมว") {
+        setSpeciesOptions(catSpecieOptions);
+      }
+    } else {
+      setSpeciesOptions([]);
+    }
+  };
 
   // const [subdistricts, setSubdistricts] = useState<OptionI[]>([{ value: "", label: "" }]);
   const [mapVisible, setMapVisible] = useState<boolean>(false);
@@ -24,6 +45,7 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
 
   const [filters, setFilters] = useState<FilterI>({
     genderFilter: null,
+    animalFilter: null,
     speciesFilter: null,
     colorsFilter: null,
     lastSeenDateFilter: null,
@@ -33,10 +55,10 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
     lngFilter: null,
   });
 
-  let districts: { value: string; label: string }[] = [];
-  for (const district in area) {
-    districts.push({ value: district, label: district });
-  }
+  // let districts: { value: string; label: string }[] = [];
+  // for (const district in area) {
+  //   districts.push({ value: district, label: district });
+  // }
 
   // const getSubdistrict = (district: keyof typeof area | null) => {
   //   if (district) {
@@ -71,16 +93,20 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
       label: "เพศ :",
       isMulti: false,
       name: "genderFilter",
-      options: [
-        { value: "เพศผู้", label: "เพศผู้" },
-        { value: "เพศเมีย", label: "เพศเมีย" },
-      ],
+      options: genderOptions,
+    },
+    {
+      label: "สัตว์ :",
+      isMulti: false,
+      name: "animalFilter",
+      options: animalOptions,
+      getOptions: generateSpeciesOptions,
     },
     {
       label: "สายพันธ์ุ:",
       isMulti: false,
       name: "speciesFilter",
-      options: dogSpecieOptions,
+      options: speciesOptions,
     },
 
     {
@@ -108,6 +134,7 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
       const body = {
         postType: path == "/" ? "lost" : "found",
         gender: filters.genderFilter,
+        animal: filters.animalFilter,
         species: filters.speciesFilter,
         colors: filters.colorsFilter,
         lastSeenFrom: filters.lastSeenDateFilter,
@@ -188,6 +215,7 @@ export const Filter = ({ setCards }: { setCards: Dispatch<SetStateAction<PetCard
                     name={f.name}
                     options={f.options ? f.options : []}
                     setFilters={setFilters}
+                    getOptions={f.getOptions ? f.getOptions : undefined}
                   />
                 ) : (
                   <input

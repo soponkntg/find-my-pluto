@@ -1,6 +1,8 @@
-import { FormI } from "@/constant/interface";
+import { FormI, OptionI } from "@/constant/interface";
 import {
+  animalOptions,
   bracletColorOptions,
+  catSpecieOptions,
   colorOptions,
   dogSpecieOptions,
   genderOptions,
@@ -12,6 +14,7 @@ import Field from "./Field";
 import Input from "./Input";
 import Image from "next/image";
 import buttonRight from "../../../public/button-right.png";
+import { useState } from "react";
 
 interface Props {
   setFormDate: React.Dispatch<React.SetStateAction<FormI>>;
@@ -30,6 +33,21 @@ const DogDetail = ({ setFormDate, nextSection, postType }: Props) => {
   const submit = (data: any) => {
     setFormDate((prev) => ({ ...prev, ...data }));
     nextSection();
+  };
+
+  const [speciesOptions, setSpeciesOptions] = useState<OptionI[]>([]);
+
+  const generateSpeciesOptions = (animal: string | null) => {
+    if (animal) {
+      if (animal == "หมา") {
+        setSpeciesOptions(dogSpecieOptions);
+      }
+      if (animal == "แมว") {
+        setSpeciesOptions(catSpecieOptions);
+      }
+    } else {
+      setSpeciesOptions([]);
+    }
   };
 
   return (
@@ -58,6 +76,18 @@ const DogDetail = ({ setFormDate, nextSection, postType }: Props) => {
         />
       </Field>
 
+      <Field label="สัตว์*" error={errors.species}>
+        <CustomSelect
+          control={control}
+          label={"สัตว์"}
+          isMulti={false}
+          name={"animal"}
+          require={"กรอกข้อมูลให้ครบถ้วน"}
+          options={animalOptions}
+          getOptions={generateSpeciesOptions}
+        />
+      </Field>
+
       <Field label="สายพันธ์ุ*" error={errors.species}>
         <CustomSelect
           control={control}
@@ -65,7 +95,7 @@ const DogDetail = ({ setFormDate, nextSection, postType }: Props) => {
           isMulti={false}
           name={"species"}
           require={"กรอกข้อมูลให้ครบถ้วน"}
-          options={dogSpecieOptions}
+          options={speciesOptions}
         />
       </Field>
 

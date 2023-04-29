@@ -84,6 +84,7 @@ export interface PetCardInfoI extends PetCardPreviewI {
 
 export interface FilterI {
   genderFilter: string | null;
+  animalFilter: string | null;
   speciesFilter: string | null;
   colorsFilter: string[] | null;
   lastSeenDateFilter: string | null;
