@@ -84,7 +84,7 @@ const DogId = ({
           </div>
         </div>
         <div className="flex-1 h-fit bg-detail-card px-8 py-6 rounded-3xl space-y-5 text-white">
-          <h1 className="font-bold text-4xl">ข้อมูลน้อง</h1>
+          <h2 className="font-bold text-4xl">ข้อมูลน้อง</h2>
           <div className="text-xl space-y-2">
             <div className="flex items-start justify-between flex-wrap">
               {animalName && (

@@ -16,9 +16,9 @@ export default function Home({ defaultCards }: { defaultCards: PetCardPreviewI[]
   return (
     <>
       <Meta
-        title={"Findmypluto"}
+        title={"Findmypluto เว็บไซต์เพื่อช่วยในการตามหาสัตว์เลี้ยงหลงทางหรือเจ้าของ"}
         description={
-          "เว็บไซต์เพื่อช่วยในการตามหาสัตว์เลี้ยงหลงทางหรือเจ้าของน้อง เราได้พบว่าวิธีการตามหาสัตว์เลี้ยงในปัจจุบันนั้นมีความซับซ้อน จึงทำให้เราตัดสินใจสร้างเว็บไซต์นี้ขึ้นมา เพื่อช่วยให้การค้นหาและพบสัตว์เลี้ยงที่หายตัวไปนั้นง่ายและรวดเร็วขึ้น"
+          "เว็บไซต์เพื่อช่วยในการตามหาสัตว์เลี้ยงหลงทางหรือเจ้าของ สามารถสร้างประกาศและค้นหาข้อมูลสัตว์เลี้ยงหรือเจ้าของ"
         }
       />
       <PageLayout>
@@ -26,7 +26,7 @@ export default function Home({ defaultCards }: { defaultCards: PetCardPreviewI[]
         <div className="flex flex-col sm:flex-row space-y-8 sm:space-y-0 sm:space-x-8 z-0">
           <div>
             <div className="flex flex-col items-center p-3 bg-primary shadow-filter rounded-xl space-y-4">
-              <h1 className="text-white text-center text-4xl font-bold">ตามหาน้อง</h1>
+              <h2 className="text-white text-center text-4xl font-bold">ตามหาน้อง</h2>
               <Filter setCards={setCards} />
               <div className="hidden xs:block">
                 <Button onClick={() => openForm()} />
