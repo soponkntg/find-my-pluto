@@ -7,16 +7,18 @@ import moment from "moment";
 import { GetServerSideProps } from "next";
 import { useState } from "react";
 import { NextSeo } from "next-seo";
+import { Description } from "@/component/Description";
 
 const FoundDog = ({ defaultCards }: { defaultCards: PetCardPreviewI[] }) => {
   const [cards, setCards] = useState<PetCardPreviewI[]>(defaultCards);
   const { openForm } = useDataContext();
 
-  console.log(defaultCards);
+  // console.log(defaultCards);
 
   return (
     <>
       <PageLayout>
+        <Description />
         <div className="flex flex-col sm:flex-row space-y-8 sm:space-y-0 sm:space-x-8 z-0">
           <div>
             <div className="flex flex-col items-center p-3 bg-primary shadow-filter rounded-xl space-y-4">

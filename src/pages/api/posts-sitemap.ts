@@ -9,7 +9,6 @@ import { PetCardPreviewI } from "@/constant/interface";
 
 const getAllslug = async () => {
   const response: PetCardPreviewI[] = (await axios.post(`/dev/cards`)).data.message;
-  console.log(response);
   const paths = response.map((animal) => ({
     params: {
       dogId: animal.animalId,
@@ -55,7 +54,6 @@ const nextSiteMap = async (req: NextApiRequest, res: NextApiResponse) => {
 
     res.end(xmlString);
   } catch (e) {
-    console.log(e);
     res.send(JSON.stringify(e));
   }
 };
