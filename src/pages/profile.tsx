@@ -51,17 +51,28 @@ const Profile = () => {
     }
   };
   const handleExtend = async (animalId: string) => {
-    const extendCard = await PlutoAxios.put(`dev/extend/${animalId}`, {
-      headers: {
-        Authorization: userToken,
-      },
-    });
+    const extendDate = new Date();
+    extendDate.setHours(0, 0, 0, 0);
+    extendDate.setMonth(extendDate.getMonth() + 1);
+    const extendCard = await PlutoAxios.put(
+      `dev/card/${animalId}`,
+      { expiredAt: extendDate.getTime(), stage: "finding" },
+      {
+        headers: {
+          Authorization: userToken,
+        },
+      }
+    );
     //setCard => extend that card
     if (extendCard.data.status == 200) {
       setCards((oldCards) => {
         const newCards = oldCards.map((card) => {
           if (card.animalId == animalId) {
-            return { ...card, expiredAt: extendCard.data.message };
+            return {
+              ...card,
+              stage: extendCard.data.message.stage,
+              expiredAt: extendCard.data.message.expiredAt,
+            };
           }
           return card;
         });
